@@ -1,9 +1,10 @@
-import Home from "./Home"
-import './App.css'
+import Home from "./Home";
+import "./App.css";
 
 function App() {
   return (
-    <Home/>
-  )}
+    <Home />
+  );
+}
 
-export default App
+export default App;
