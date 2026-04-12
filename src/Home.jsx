@@ -5,13 +5,13 @@ export default function HomePage() {
   return (
     <div>
       <nav>
-        <div className="Mains">
+        <a className="Mains" href="/">
           <img src={Logo} width={50} height={50} alt="Logo" />
           <span>SiloTech</span>
-        </div>
+        </a>
 
         <ul className="url">
-          <li><a href="/">Dashboard</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/">Sobre nós</a></li>
           <li><a href="/">Contato</a></li>
         </ul>

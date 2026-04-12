@@ -9,7 +9,6 @@ import {
   Legend
 } from "recharts";
 
-// 👉 agora com horário real
 const dataUmidade = [
   { tempo: "1", umidade: 32 },
   { tempo: "2", umidade: 30 },
@@ -36,7 +35,7 @@ const dataTemperatura = [
   { tempo: "10", temperatura: 31 },
 ];
 
-export const Grafico = () => {
+export const GraficoUmidade = () => {
   return (
     <div style={{ width: "100%", height: 300 }}>
       <ResponsiveContainer>

@@ -1,6 +1,5 @@
 import Logo from "./assets/Logo.png";
-import Grafico from "./Grafico.jsx";
-import App from "./Grafico.jsx";
+import { GraficoUmidade, GraficoTemperatura } from "./Grafico";
 
 export default function Dashboard() {
   return (
@@ -8,8 +7,8 @@ export default function Dashboard() {
       <section className="Dashboard">
         <h2>Dashboard</h2>
         <p>Bem-vindo ao seu painel de controle!</p>
-        <Grafico />
-        <App />
+        <GraficoUmidade />
+        <GraficoTemperatura />
       </section>
     </div>
   );
