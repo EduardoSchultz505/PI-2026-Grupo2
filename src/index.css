@@ -22,6 +22,7 @@ body {
 
 .hero-conteudo {
   height: 260px;
+  width: 42%;
   margin-left: 80px;
   display: flex;
   justify-content: space-between;
@@ -39,11 +40,59 @@ body {
 }
 
 .iniciar {
-  width: 180px;
+  width: 120px;
   text-align: center;
   background-color: #27ae60;
   color: #f5f7f6;
   padding: 12px;
-  font-size: 24px;
+  font-size: 18px;
   border-radius: 8px;
+}
+
+.section2 {
+  height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.section2 img {
+  height: 500px;
+  width: 600px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.texto2 {
+  width: 580px;
+  height: 280px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.texto2 h1 {
+  font-size: 36px;
+}
+
+.texto2 p {
+  color: #757575;
+}
+
+.Tecnologia {
+  color: #1e8449;
+  font-weight: 700;
+}
+
+.items {
+  display: flex;
+  gap: 8px;
+  color: #757575;
+  margin-bottom: 8px;
+}
+
+.items svg {
+  font-size: 20px;
+  color: green;
+  text-align: center;
 }

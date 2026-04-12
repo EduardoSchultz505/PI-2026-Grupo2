@@ -4,12 +4,17 @@
 
 nav {
   background-color: #ffffff; /* Preto: #1a1a1a Cinza: #4a4a4a Branco: #f5f7f6*/
-  width: 100% auto; /* Verdes: #2ecc71 #27ae60 #1e8449 */
+  width: 100%; /* Verdes: #2ecc71 #27ae60 #1e8449 */
   height: 80px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 50px;
+  position: sticky;
+  top: 0;
+  left: 0;
+  box-sizing: border-box; 
+  
 }
 .url {
   list-style: none;
