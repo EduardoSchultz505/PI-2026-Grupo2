@@ -1,4 +1,3 @@
-import Logo from "./assets/Logo.png";
 import { GraficoUmidade, GraficoTemperatura } from "./Grafico";
 
 export default function Dashboard() {

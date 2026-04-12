@@ -1,63 +1,49 @@
-body{
+body {
   margin: 0;
-  background-color: #E8E8E8;
-  font-family: "Poppins", sans-serif;
-  color: #1B5E20;
+  font-family: "Miranda Sans", sans-serif;
+  font-weight: 500;
+  color: #121212;
+  background-color: #f5f7f6;
 }
 
-nav {
-  background-color: #1B5E20;
-  width: 100% auto;
-  height: 70px;
+.hero {
+  width: 100%;
+  height: 90vh;
+
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3)), url("./assets/Hero.jpg");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
   display: flex;
   align-items: center;
+}
+
+.hero-conteudo {
+  height: 260px;
+  margin-left: 80px;
+  display: flex;
   justify-content: space-between;
-  padding: 0 30px;
+  flex-direction: column;
 }
 
-
-.url {
-  list-style: none;
-  display: flex;
-  gap: 30px;
-  color: aliceblue;
+.hero-conteudo h1 {
+  color: #f5f7f6;
+  font-size: 64px
 }
 
-a {
-  color: aliceblue;
-  text-decoration: none;
+.hero p {
+  color: #a1a1a1;
+  font-size: 20px;
 }
 
-.Hero {
-  height: 65vh;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  font-size:large;
-  margin-left: 30px;
-}
-
-.Hero img {
+.iniciar {
+  width: 180px;
+  text-align: center;
+  background-color: #27ae60;
+  color: #f5f7f6;
+  padding: 12px;
+  font-size: 24px;
   border-radius: 8px;
-}
-
-.Mains {
-  display: flex;
-  width: 10%;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.Entrada{
-  width: 250px;
-  display: flex;
-  justify-content: end;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.asd {
-  background-color: black;
-  padding: 5px;
-  border-radius: 6px;
 }

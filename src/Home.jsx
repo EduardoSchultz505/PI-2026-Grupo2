@@ -1,33 +1,18 @@
-import Logo from "./assets/Logo.png";
-import Hero from "./assets/SiloIMG.webp"
+import { Link } from "react-router-dom";
 
+import "./index.css"
 export default function HomePage() {
   return (
     <div>
-      <nav>
-        <a className="Mains" href="/">
-          <img src={Logo} width={50} height={50} alt="Logo" />
-          <span>SiloTech</span>
-        </a>
+      <section className="hero">
+        <div className="hero-conteudo">
+          <h1>SiloTech</h1>
+          <p>Transformando a gestão de armazenamento agrícola com<br></br>
+          tecnologia de ponta. Monitoramento inteligente, controle total<br></br>
+          e eficiência para sua produção.</p>
 
-        <ul className="url">
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="/">Sobre nós</a></li>
-          <li><a href="/">Contato</a></li>
-        </ul>
-
-        <div className="Entrada">
-          <a href="/" className="asd">Fazer Login</a>
-          <a href="/" className="asd">Iniciar Agora</a>
+          <Link className="iniciar" to="/cadastro">Iniciar Agora</Link>
         </div>
-      </nav>
-
-      <section className="Hero">
-        <div>
-          <h1>Diminuindo suas perdas de grãos.</h1>
-          <p>Reduza perdas, aumente a qualidade e tenha controle total do armazenamento com tecnologia.</p>
-        </div>
-        <img src={Hero} alt="Imagem de Silo de Grãos"/>
       </section>
     </div>
   );
