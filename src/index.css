@@ -82,6 +82,7 @@ body {
 .Tecnologia {
   color: #1e8449;
   font-weight: 700;
+  align-items: center ;
 }
 
 .items {
@@ -95,4 +96,55 @@ body {
   font-size: 20px;
   color: green;
   text-align: center;
+}
+
+.section3 {
+  padding: 80px 40px;
+  background-color: #f2f2f2;
+  text-align: center;
+}
+
+.section3 h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.section3 p {
+  color: #757575;
+  width: 350px;
+  margin: 0 auto 50px;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.cards div {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 30px;
+  width: 300px;
+  text-align: left;
+}
+
+.cards svg {
+  font-size: 30px;
+  color: #16a34a;
+  background-color: #dcfce7;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.cards h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.cards p {
+  width: 300px;
+  color: #757575;
 }
