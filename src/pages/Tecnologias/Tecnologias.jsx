@@ -1,12 +1,12 @@
-import "./Tecnologia.css"
+import "./Tecnologias.css"
 import { CiWifiOn, CiServer } from "react-icons/ci";
 import { FiShield } from "react-icons/fi";
 import { IoFlashOutline } from "react-icons/io5";
-import Trator2 from "./assets/trator2.jpeg"
+import Trator2 from "../../assets/trator2.jpeg"
 import { Link } from "react-router-dom";
 
 
-export default function Tecnologia() {
+export default function Tecnologias() {
   return (
     <div>
       <section className="hero2">

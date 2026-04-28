@@ -27,9 +27,9 @@ function Footer () {
 
         <div className="footer-item">
           <h3>Contato</h3>
-          <Link>contato@silotech.com.br</Link>
-          <Link>+55 (49) 98891-8437</Link>
-          <Link>Concórdia, Santa Catarina, Brasil</Link>
+          <p>contato@silotech.com.br</p>
+          <p>+55 (49) 98891-8437</p>
+          <p>Concórdia, Santa Catarina, Brasil</p>
         </div>
       </div>
 

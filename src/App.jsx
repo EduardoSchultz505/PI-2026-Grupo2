@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import Home from "./Home.jsx"
-import Navbar from "./Navbar.jsx";
-import Contato from "./contato.jsx"
-import Tecnologia from "./Tecnologia.jsx"
-import Footer from "./Footer.jsx";
+import Dashboard from "./pages/Dashboard/Dashboard.jsx";
+import Home from "./pages/Home/Home.jsx"
+import Navbar from "./components/Navbar/Navbar.jsx";
+import Contato from "./pages/Contato/contato.jsx"
+import Tecnologias from "./pages/Tecnologias/Tecnologias.jsx"
+import Footer from "./components/Footer/Footer.jsx";
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/contato" element={<Contato />} />
-        <Route path="/tecnologia" element={<Tecnologia />}/>
+        <Route path="/tecnologia" element={<Tecnologias />}/>
       </Routes>
       <Footer />
     </BrowserRouter>

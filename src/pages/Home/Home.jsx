@@ -3,10 +3,9 @@ import { FaRegCircleCheck, FaArrowRight } from "react-icons/fa6";
 import { GoGraph } from "react-icons/go";
 import { FiShield } from "react-icons/fi";
 import { IoFlashOutline } from "react-icons/io5";
-import Trator from "./assets/trator.jpg"
+import Trator from "../../assets/trator.jpg"
+import "./Home.css"
 
-
-import "./index.css"
 export default function HomePage() {
   return (
     <div>

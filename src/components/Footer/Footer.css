@@ -12,12 +12,10 @@
 .footer-item {
     display: flex;
     flex-direction: column;
-    gap: 3px;
 }
 
 .footer-item h2 {
   color: #2ecc71;
-  margin-bottom: 20px;
 }
 
 .footer-item h3 {
@@ -25,7 +23,7 @@
   color: #ffffff;
 }
 
-.footer-item a {
+.footer-item a, .footer-item p {
   margin: 6px 0;
   color: #707070;
 }
