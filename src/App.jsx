@@ -5,6 +5,8 @@ import Navbar from "./components/Navbar/Navbar.jsx";
 import Contato from "./pages/Contato/contato.jsx"
 import Tecnologias from "./pages/Tecnologias/Tecnologias.jsx"
 import Footer from "./components/Footer/Footer.jsx";
+import Login from "./pages/Login/Login.jsx";
+import Cadastro from "./pages/Cadastro/Cadastro.jsx";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/contato" element={<Contato />} />
         <Route path="/tecnologia" element={<Tecnologias />}/>
+        <Route path="/login" element={<Login />}/>
+        <Route path="/cadastro" element={<Cadastro />}/>
       </Routes>
       <Footer />
     </BrowserRouter>

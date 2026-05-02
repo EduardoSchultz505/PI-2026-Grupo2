@@ -1,16 +1,70 @@
-# React + Vite
+# SiloTech - Sistema de Monitoramento e Gestão
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+O **SiloTech** é uma plataforma full-stack desenvolvida para o monitoramento inteligente de silos. O sistema permite o cadastro de usuários, autenticação segura e a visualização de dados críticos coletados por sensores.
 
-Currently, two official plugins are available:
+## Tecnologias Utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Frontend
+*   **React.js**: Biblioteca para construção da interface de usuário.
+*   **Vite**: Ferramenta de build rápida para o frontend.
+*   **React Router Dom**: Gerenciamento de rotas e navegação.
+*   **CSS3**: Estilização personalizada.
 
-## React Compiler
+### Backend
+*   **FastAPI**: Framework Python de alta performance para a criação da API.
+*   **SQLAlchemy**: ORM para comunicação com o banco de dados.
+*   **Pydantic**: Validação de dados e esquemas.
+*   **Uvicorn**: Servidor ASGI para rodar a aplicação.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Banco de Dados
+*   **SQLite**: Banco de dados relacional leve, armazenado em arquivo local (`silotech.db`).
 
-## Expanding the ESLint configuration
+### Hardware
+*   **Arduino**: O Arduino recebe os pulsos digitais do sensor e os converte em variáveis de ponto flutuante (float) para temperatura e umidade.
+*   **DHT11**: O DHT11 realiza a leitura de temperatura e umidade da massa de ar.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Estrutura do Projeto
+
+*   `src/backend/`: Contém o código do servidor Python, modelos do banco de dados e rotas da API.
+*   `src/frontend/`: Contém os componentes React, páginas de Login, Cadastro e estilos.
+
+---
+
+## Como rodar o projeto
+
+### 1. Pré-requisitos
+*   Node.js instalado.
+*   Python 3.10 ou superior instalado.
+
+### 2. Configurando o Backend
+Navegue até a pasta do backend e instale as dependências:
+```bash
+pip install fastapi uvicorn sqlalchemy email-validator
+```
+
+Após instalar as dependências, inicie o servidor com o comando:
+```bash
+python -m uvicorn banco:app --reload
+```
+
+3. Configurando o Frontend
+Abra um novo terminal (mantenha o do Python rodando) e navegue até a pasta do seu projeto React:
+
+```bash
+cd caminho/para/seu/projeto-frontend
+```
+
+Instale as dependências do Node:
+
+```bash
+npm install
+```
+
+Inicie o servidor de desenvolvimento do Vite:
+
+```bash
+npm run dev
+```
+O terminal informará um endereço (geralmente http://localhost:5173). Abra este link no seu navegador.
