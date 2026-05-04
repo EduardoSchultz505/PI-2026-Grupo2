@@ -1,17 +1,19 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import Column, Integer, String, create_engine
-from sqlalchemy.orm import sessionmaker, Session, declarative_base
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, create_engine, desc
+from sqlalchemy.orm import sessionmaker, Session, declarative_base, relationship
 from pydantic import BaseModel, Field
 from passlib.context import CryptContext
+from datetime import datetime
+import pytz
 
-ADMIN_SECRET_KEY = "admin123" #preciso mudar essa senha, talvez criptografar tambem
 
+ADMIN_SECRET_KEY = "$pbkdf2-sha256$29000$8/7f.58TIkTonZOydo4xhg$DAEhYqNr9TIRoABeC9jIW5T2T6jtTNGVvjH7WP8vak8"
 SQLALCHEMY_DATABASE_URL = "sqlite:///./silotech.db"
+
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
-
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 class User(Base):
@@ -20,11 +22,24 @@ class User(Base):
     username = Column(String)
     email = Column(String, unique=True, index=True)
     password = Column(String)
+    
+    leituras = relationship("Leitura", back_populates="dono")
+
+class Leitura(Base):
+    __tablename__ = "leituras"
+    id = Column(Integer, primary_key=True, index=True)
+    sensor_nome = Column(String, index=True) 
+    temperatura = Column(Float)
+    umidade = Column(Float)
+    horario = Column(DateTime, default=lambda: datetime.now(pytz.timezone('America/Sao_Paulo')))
+    owner_id = Column(Integer, ForeignKey("users.id"))
+    
+    dono = relationship("User", back_populates="leituras")
 
 Base.metadata.create_all(bind=engine)
 
 class UserCreate(BaseModel):
-    username: str = Field(..., min_length=3, max_length=20)
+    username: str = Field(..., min_length=3)
     email: str
     password: str = Field(..., min_length=8)
     admin_key: str 
@@ -33,7 +48,13 @@ class LoginRequest(BaseModel):
     email: str
     password: str
 
-app = FastAPI()
+class LeituraCreate(BaseModel):
+    sensor_nome: str
+    temperatura: float
+    umidade: float
+    owner_id: int
+
+app = FastAPI(title="SiloTech API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -50,20 +71,19 @@ def get_db():
     finally:
         db.close()
 
-def gerar_hash_senha(password: str):
-    return pwd_context.hash(password)
-
 def verificar_senha(senha_digitada, senha_criptografada):
     return pwd_context.verify(senha_digitada, senha_criptografada)
 
-@app.post("/cadastro")
-def cadastro(request: UserCreate, db: Session = Depends(get_db)):
-    if request.admin_key != ADMIN_SECRET_KEY:
-        raise HTTPException(status_code=403, detail="Chave de Mestre incorreta. Acesso negado.")
+def gerar_hash_senha(password: str):
+    return pwd_context.hash(password)
 
-    db_user = db.query(User).filter(User.email == request.email).first()
-    if db_user:
-        raise HTTPException(status_code=400, detail="E-mail já cadastrado")
+@app.post("/cadastro", status_code=status.HTTP_201_CREATED)
+def cadastro(request: UserCreate, db: Session = Depends(get_db)):
+    if not pwd_context.verify(request.admin_key, ADMIN_SECRET_KEY):
+        raise HTTPException(status_code=403, detail="Chave mestre inválida.")
+
+    if db.query(User).filter(User.email == request.email).first():
+        raise HTTPException(status_code=400, detail="E-mail já cadastrado.")
 
     novo_usuario = User(
         username=request.username,
@@ -71,24 +91,64 @@ def cadastro(request: UserCreate, db: Session = Depends(get_db)):
         password=gerar_hash_senha(request.password)
     )
     
-    db.add(novo_usuario)
-    db.commit()
-    db.refresh(novo_usuario)
-    return {"status": "sucesso", "message": "Conta criada!"}
+    try:
+        db.add(novo_usuario)
+        db.commit()
+        return {"status": "sucesso", "message": "Conta criada com sucesso!"}
+    except Exception:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Erro ao criar usuário.")
 
 @app.post("/login")
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == request.email).first()
 
     if not user or not verificar_senha(request.password, user.password):
-        raise HTTPException(status_code=401, detail="E-mail ou senha incorretos")
+        raise HTTPException(status_code=401, detail="Credenciais incorretas.")
 
     return {
         "status": "sucesso",
         "message": f"Bem-vindo, {user.username}!",
-        "username": user.username
+        "username": user.username,
+        "user_id": user.id 
     }
 
-@app.get("/usuarios")
-def listar_usuarios(db: Session = Depends(get_db)):
-    return db.query(User).all()
+@app.post("/sensor/leitura")
+def adicionar_leitura(request: LeituraCreate, db: Session = Depends(get_db)):
+    if not db.query(User).filter(User.id == request.owner_id).first():
+        raise HTTPException(status_code=404, detail="Usuário dono não encontrado.")
+
+    nova_leitura = Leitura(
+        sensor_nome=request.sensor_nome,
+        temperatura=request.temperatura,
+        umidade=request.umidade,
+        owner_id=request.owner_id
+    )
+    
+    try:
+        db.add(nova_leitura)
+        db.commit()
+
+        leituras_antigas = db.query(Leitura).filter(
+            Leitura.owner_id == request.owner_id,
+            Leitura.sensor_nome == request.sensor_nome
+        ).order_by(desc(Leitura.horario)).all()
+
+        if len(leituras_antigas) > 12:
+            for extra in leituras_antigas[12:]:
+                db.delete(extra)
+            db.commit()
+
+        return {"status": "sucesso", "msg": f"Leitura registrada para {request.sensor_nome}"}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/sensor/meu-historico/{usuario_id}")
+def obter_historico_pessoal(usuario_id: int, sensor: str, db: Session = Depends(get_db)):
+    dados = db.query(Leitura).filter(
+        Leitura.owner_id == usuario_id,
+        Leitura.sensor_nome == sensor
+    ).order_by(desc(Leitura.horario)).limit(12).all()
+    
+    return dados

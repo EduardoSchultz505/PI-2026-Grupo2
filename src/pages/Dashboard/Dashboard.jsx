@@ -16,8 +16,7 @@ export default function Dashboard() {
       <section className="Dashboard">
         <h2>Dashboard</h2>
         <p>Bem-vindo ao seu painel de controle!</p>
-        <GraficoUmidade />
-        <GraficoTemperatura />
+        <Grafico sensorId="sala_01" />
       </section>
       <div>
       <h1>Olá, {nomeUsuario || "Visitante"}!</h1>

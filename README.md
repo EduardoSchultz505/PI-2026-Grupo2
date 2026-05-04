@@ -2,6 +2,10 @@
 
 O **SiloTech** é uma plataforma full-stack desenvolvida para o monitoramento inteligente de silos. O sistema permite o cadastro de usuários com validação administrativa, autenticação segura e a visualização de dados críticos coletados por sensores em tempo real.
 
+### Captura de Tela
+
+imagem dos graficos
+
 ## Tecnologias Utilizadas
 
 ### Frontend
@@ -43,7 +47,7 @@ O **SiloTech** é uma plataforma full-stack desenvolvida para o monitoramento in
 ### 2. Configurando o Backend
 Navegue até a pasta do backend e instale as dependências:
 ```bash
-pip install fastapi uvicorn sqlalchemy passlib[bcrypt]
+pip install fastapi uvicorn sqlalchemy passlib[bcrypt] pydantic requests
 ```
 Após instalar as dependências, inicie o servidor com o comando:
 ```bash
@@ -53,7 +57,7 @@ python -m uvicorn banco:app --reload
 ### 3. Configurando o Frontend
 Abra um novo terminal (mantenha o do Python rodando) e navegue até a pasta do seu projeto React:
 ```bash
-cd caminho/para/seu/projeto-frontend
+cd PI-2026-Grupo2
 ```
 Instale as dependências do Node:
 ```bash

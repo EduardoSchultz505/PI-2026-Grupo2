@@ -12,17 +12,19 @@ function Footer () {
         </div>
 
         <div className="footer-item">
-          <h3>Soluções</h3>
-            <Link>Infraestrutura</Link>
-            <Link>Segurança</Link>
-            <Link>Consultoria</Link>
+          <h3>Usuário</h3>
+            <Link to={"/login"}>Login</Link>
+            <Link to={"/dashboard"}>Dashboard</Link>
+            <Link to={"/conta"}>Conta</Link>
+            <Link to={"/monitoramento"}>Monitoramento</Link>
         </div>
 
         <div className="footer-item">
           <h3>Empresa</h3>
-            <Link>Sobre nós</Link>
+            <Link to={"/sobrenos"}>Sobre nós</Link>
             <Link to={"/contato"}>Contato</Link>
             <Link to={"/cadastro"}>Acesso Admin</Link>
+            <Link to={"/perguntas"}>Perguntas Frequentes</Link>
         </div>
 
         <div className="footer-item">

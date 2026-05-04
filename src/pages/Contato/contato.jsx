@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FiMail, FiPhone, FiMapPin } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import "./contato.css";
+import "./Contato.css";
 
 export default function Contato() {
   const [form, setForm] = useState({

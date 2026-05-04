@@ -8,9 +8,9 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loggedUser = localStorage.getItem("userToken");
+    const loggedUser = localStorage.getItem("user_id");
     if (loggedUser) {
-      navigate("/dashboard");
+      navigate("/conta");
     }
   }, [navigate]);
 
@@ -27,18 +27,20 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
+        localStorage.setItem("user_id", data.user_id); 
         localStorage.setItem("userName", data.username);
         localStorage.setItem("userEmail", email);
-        localStorage.setItem("userToken", "token-gerado-ou-fixo");
+        
+        localStorage.setItem("userToken", "logado-com-sucesso");
 
-        alert(`Sucesso: ${data.message}`);
+        alert(data.message || `Bem vindo de volta ${data.username}!`);
         navigate("/dashboard");
       } else {
-        alert(`Erro: ${data.detail || "Falha no login"}`);
+        alert(`Erro: ${data.detail || "E-mail ou senha incorretos"}`);
       }
     } catch (error) {
       console.error("Erro na conexão:", error);
-      alert("Não foi possível conectar ao servidor Python.");
+      alert("Não foi possível conectar ao servidor Python. Verifique se o backend está rodando.");
     }
   };
 
@@ -79,10 +81,6 @@ export default function Login() {
             Entrar
           </button>
         </form>
-
-        <a href="/" className="esqueceu-senha">
-          Esqueceu sua senha?
-        </a>
       </div>
     </div>
   );
