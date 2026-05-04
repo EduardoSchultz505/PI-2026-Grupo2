@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loggedUser = localStorage.getItem("userToken");
+    if (loggedUser) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,17 +21,19 @@ export default function Login() {
       const response = await fetch("http://127.0.0.1:8000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }), // Sem username aqui!
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
+        localStorage.setItem("userName", data.username);
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("userToken", "token-gerado-ou-fixo");
+
         alert(`Sucesso: ${data.message}`);
-        console.log("Token recebido:", data.user_email);
-        // Aqui você poderia usar o useNavigate() para ir para a Home
+        navigate("/dashboard");
       } else {
-        // Pega a mensagem de erro vinda do Python (detail)
         alert(`Erro: ${data.detail || "Falha no login"}`);
       }
     } catch (error) {
@@ -47,6 +58,7 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="username"
             />
           </div>
 
@@ -59,6 +71,7 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete="current-password"
             />
           </div>
 

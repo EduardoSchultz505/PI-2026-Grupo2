@@ -14,13 +14,12 @@ export default function Navbar() {
           <ul className="url">
             <li><NavLink to="/">Início</NavLink></li>
             <li><NavLink to="/tecnologia">Tecnologia</NavLink></li>
-            <li><NavLink to="/dashboard">Dashboard</NavLink></li>
+            <li><NavLink to="/sobrenos">Sobre Nós</NavLink></li>
             <li><NavLink to="/contato">Contato</NavLink></li>
           </ul>
 
           <div className="Botao">
             <a className="Login" href="/login">Entrar</a>
-            <a className="Cadastro" href="/cadastro">Cadastro</a>
           </div>
         </div>
       </nav>

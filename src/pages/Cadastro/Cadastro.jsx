@@ -6,24 +6,31 @@ export default function Cadastro() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [adminKey, setAdminKey] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/cadastro', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, email, password }),
+      const response = await fetch('http://localhost:8000/cadastro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password, admin_key: adminKey }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        navigate('/login');
+        localStorage.setItem('userToken', 'logado');
+        localStorage.setItem('userName', username);
+        localStorage.setItem('userEmail', email);
+
+        alert("Conta criada com sucesso!");
+        navigate('/dashboard');
       } else {
-        alert(data.detail || "Erro ao cadastrar usuário.");
+        const errorMsg = Array.isArray(data.detail) ? data.detail[0].msg : data.detail;
+        alert(`Erro: ${errorMsg || "Erro ao cadastrar"}`);
       }
     } catch (error) {
       console.error("Erro na conexão:", error);
@@ -35,7 +42,7 @@ export default function Cadastro() {
     <div className="login-container">
       <div className="login">
         <h1>SiloTech</h1>
-        <p>Cadastre sua Conta</p>
+        <p>Painel Administrativo - Cadastro</p>
 
         <form className="login-form" onSubmit={handleSubmit}>
           <div>
@@ -65,11 +72,11 @@ export default function Cadastro() {
           </div>
 
           <div>
-            <label htmlFor="password">Senha</label>
+            <label htmlFor="password">Senha Pessoal</label>
             <input
               id="password"
               type="password"
-              placeholder="Crie uma senha"
+              placeholder="Crie sua senha"
               value={password}
               minLength="8"
               onChange={(e) => setPassword(e.target.value)}
@@ -77,14 +84,21 @@ export default function Cadastro() {
             />
           </div>
 
-          <button type="submit" className="botao-login">Cadastrar</button>
-        </form>
+          <div>
+            <label>Chave Admin</label>
+            <input
+              id="adminKey"
+              type="password"
+              placeholder="Digite a chave de segurança"
+              value={adminKey}
+              onChange={(e) => setAdminKey(e.target.value)}
+              required
+            />
+          </div>
 
-        <p className="esqueceu-senha">
-          Já tem uma conta? <Link to="/login">Faça login</Link>
-        </p>
+          <button type="submit" className="botao-login">Criar Conta</button>
+        </form> 
       </div>
     </div>
   );
 }
-

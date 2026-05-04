@@ -2,52 +2,47 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.orm import sessionmaker, Session, declarative_base
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field
+from passlib.context import CryptContext
 
-# --- CONFIGURAÇÃO DO BANCO DE DADOS ---
+ADMIN_SECRET_KEY = "admin123" #preciso mudar essa senha, talvez criptografar tambem
+
 SQLALCHEMY_DATABASE_URL = "sqlite:///./silotech.db"
-
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, 
-    connect_args={"check_same_thread": False}
-)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# --- MODELO DA TABELA ---
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
+
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String) # Novo campo adicionado
+    username = Column(String)
     email = Column(String, unique=True, index=True)
     password = Column(String)
 
-# Cria o banco e as tabelas (se você mudou o modelo, delete o arquivo .db antigo)
 Base.metadata.create_all(bind=engine)
 
-# --- ESQUEMAS DE VALIDAÇÃO (PYDANTIC) ---
 class UserCreate(BaseModel):
     username: str = Field(..., min_length=3, max_length=20)
     email: str
     password: str = Field(..., min_length=8)
+    admin_key: str 
 
 class LoginRequest(BaseModel):
     email: str
     password: str
 
-# --- INICIALIZAÇÃO DO APP ---
 app = FastAPI()
 
-# Configuração do CORS (Ajustado para a porta padrão do Vite 5173)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Dependência do Banco de Dados
 def get_db():
     db = SessionLocal()
     try:
@@ -55,11 +50,17 @@ def get_db():
     finally:
         db.close()
 
-# --- ROTAS ---
+def gerar_hash_senha(password: str):
+    return pwd_context.hash(password)
+
+def verificar_senha(senha_digitada, senha_criptografada):
+    return pwd_context.verify(senha_digitada, senha_criptografada)
 
 @app.post("/cadastro")
 def cadastro(request: UserCreate, db: Session = Depends(get_db)):
-    # Verifica se o e-mail já existe
+    if request.admin_key != ADMIN_SECRET_KEY:
+        raise HTTPException(status_code=403, detail="Chave de Mestre incorreta. Acesso negado.")
+
     db_user = db.query(User).filter(User.email == request.email).first()
     if db_user:
         raise HTTPException(status_code=400, detail="E-mail já cadastrado")
@@ -67,23 +68,19 @@ def cadastro(request: UserCreate, db: Session = Depends(get_db)):
     novo_usuario = User(
         username=request.username,
         email=request.email,
-        password=request.password
+        password=gerar_hash_senha(request.password)
     )
     
     db.add(novo_usuario)
     db.commit()
     db.refresh(novo_usuario)
-    return {"status": "sucesso", "message": "Usuário criado!"}
+    return {"status": "sucesso", "message": "Conta criada!"}
 
 @app.post("/login")
 def login(request: LoginRequest, db: Session = Depends(get_db)):
-    # Busca o usuário apenas por e-mail e senha
-    user = db.query(User).filter(
-        User.email == request.email, 
-        User.password == request.password
-    ).first()
+    user = db.query(User).filter(User.email == request.email).first()
 
-    if not user:
+    if not user or not verificar_senha(request.password, user.password):
         raise HTTPException(status_code=401, detail="E-mail ou senha incorretos")
 
     return {
@@ -92,7 +89,6 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         "username": user.username
     }
 
-# Rota auxiliar para ver todos os usuários (útil para teste)
 @app.get("/usuarios")
 def listar_usuarios(db: Session = Depends(get_db)):
     return db.query(User).all()

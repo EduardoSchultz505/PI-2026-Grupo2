@@ -21,8 +21,8 @@ function Footer () {
         <div className="footer-item">
           <h3>Empresa</h3>
             <Link>Sobre nós</Link>
-            <Link>Carreiras</Link>
-            <Link>Contato</Link>
+            <Link to={"/contato"}>Contato</Link>
+            <Link to={"/cadastro"}>Acesso Admin</Link>
         </div>
 
         <div className="footer-item">
