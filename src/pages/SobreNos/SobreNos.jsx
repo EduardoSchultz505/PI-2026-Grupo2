@@ -1,34 +1,41 @@
 import "./SobreNos.css";
 import { useNavigate } from "react-router-dom";
-
+import Silo from "../../assets/Silo.png"
 export default function Sobre() {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  function sair() {
     localStorage.clear();
     navigate("/login");
   };
 
   return (
     <div className="sobre-container">
-      <section className="sobre-header">
-        <h1>Quem somos</h1>
+      <section className="sobre-hero">
+        <h1>Sobre a SiloTech</h1>
         <p>
-          Transformamos tecnologia em soluções práticas para o agronegócio,
-          ajudando produtores a protegerem seus silos com dados precisos.
+          Somos uma empresa de tecnologia dedicada a transformar negócios através de soluções inovadoras e personalizadas.
         </p>
       </section>
       <section className="sobre-bloco">
         <div className="texto">
-          <h2>Nossa missão</h2>
+          <h2>Nossa História</h2>
           <p>
-            Levar monitoramento inteligente para o campo, reduzindo perdas e
-            aumentando a eficiência no armazenamento de grãos através de dados
-            em tempo real.
+            Fundada em 2026, a SiloTech surgiu com o objetivo de auxiliar produtores rurais da região Oeste de Santa Catarina
+            no monitoramento das condições de armazenamento de grãos. <br></br><br></br>
+          </p>
+          <p>
+            Nossa proposta é monitorar temperatura e umidade em silos de grãos, ajudando a prevenir perdas causadas
+            por fungos, excesso de umidade e variações climáticas. Utilizando tecnologias como Arduino e
+            sensores. Nós buscamos oferecer mais segurança, praticidade e controle aos produtores. <br></br><br></br>
+          </p>
+          <p>
+            O projeto foi desenvolvido por estudantes do Curso Técnico em Informática do Instituto Federal Catarinense
+            — Campus Concórdia, unindo tecnologia e agronegócio para criar uma solução acessível, eficiente e de baixo custo.
           </p>
         </div>
 
-        <img src={""} alt="Silo monitorado" />
+        <img src={Silo} alt="Silo monitorado" />
       </section>
       <section className="sobre-cards">
 
@@ -64,7 +71,7 @@ export default function Sobre() {
           <li>Integração com sensores físicos</li>
         </ul>
       </section>
-        <button onClick={handleLogout} className="botao-sair">
+        <button onClick={sair} className="botao-sair">
         Sair da Conta
       </button>
     </div>

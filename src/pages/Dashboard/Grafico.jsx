@@ -1,79 +1,113 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, Legend
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
 } from "recharts";
 import "./Grafico.css";
 
-const API_URL = "http://127.0.0.1:8000";
-
-const GraficosSensores = () => {
+function Grafico() {
   const [dados, setDados] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [sensorSelecionado, setSensorSelecionado] = useState("Silo_Norte");
-  
+  const [listaSensores, setListaSensores] = useState([]);
+  const [sensorSelecionado, setSensorSelecionado] = useState("");
+
   const usuarioId = localStorage.getItem("user_id");
 
-  const buscarDados = useCallback(async () => {
+  const buscarSensoresDisponiveis = useCallback(async () => {
     if (!usuarioId) return;
-
     try {
       const response = await axios.get(
-        `${API_URL}/sensor/meu-historico/${usuarioId}?sensor=${sensorSelecionado}`
+        `http://127.0.0.1:8000/sensor/lista-sensores/${usuarioId}`,
       );
+      setListaSensores(response.data);
 
-      const formatados = response.data.reverse().map((item) => ({
-        ...item,
-        horaFormatada: new Date(item.horario.replace(" ", "T")).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      }));
-
-      setDados(formatados);
+      if (response.data.length > 0 && !sensorSelecionado) {
+        setSensorSelecionado(response.data[0]);
+      }
     } catch (error) {
-      console.error("Erro ao carregar dados:", error);
-    } finally {
-      setLoading(false);
+      console.error("Erro ao buscar lista de sensores:", error);
     }
   }, [usuarioId, sensorSelecionado]);
 
-  useEffect(() => {
-    setLoading(true);
-    buscarDados();
-    
-    const interval = setInterval(buscarDados, 10000);
-    return () => clearInterval(interval);
-  }, [buscarDados]);
+  const buscarDados = useCallback(async () => {
+  if (!usuarioId || !sensorSelecionado) return;
 
-  if (!usuarioId) return <h2 className="loading-text">Faça login para ver seus dados.</h2>;
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8000/sensor/meu-historico/${usuarioId}?sensor=${sensorSelecionado}`
+    );
+    const formatados = response.data.reverse().map((item) => ({
+      temperatura: item.temperatura,
+      umidade: item.umidade,
+      horaFormatada: new Date(item.horario.replace(" ", "T")).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    }));
+
+    setDados(formatados);
+  } catch (error) {
+    console.error("Erro ao carregar dados:", error);
+  } finally {
+    setLoading(false);
+  }
+}, [usuarioId, sensorSelecionado]);
+
+  useEffect(() => {
+    buscarSensoresDisponiveis();
+  }, [buscarSensoresDisponiveis]);
+
+  useEffect(() => {
+    if (sensorSelecionado) {
+      setLoading(true);
+      buscarDados();
+      const interval = setInterval(buscarDados, 10000);
+      return () => clearInterval(interval);
+    }
+  }, [buscarDados, sensorSelecionado]);
+
+  if (!usuarioId)
+    return <h2 className="loading-text">Faça login para ver seus dados.</h2>;
 
   return (
     <div className="dashboard-container">
       <div className="header-dashboard">
         <h2>Monitoramento de Silos</h2>
-        
-        {/* Seletor de Sensores */}
+
         <div className="selector-container">
           <label>Selecione o Sensor: </label>
-          <select 
-            value={sensorSelecionado} 
-            onChange={(e) => setSensorSelecionado(e.target.value)}
-          >
-            <option value="Silo_Norte">Silo Norte</option>
-            <option value="Silo_Sul">Silo Sul</option>
-            <option value="Armazem_Principal">Armazém Principal</option>
-          </select>
+            <select
+              value={sensorSelecionado}
+              onChange={(e) => setSensorSelecionado(e.target.value)}
+            >
+              {listaSensores.map((nome) => (
+                <option key={nome} value={nome}>
+                  {nome.replace("_", " ")}
+                </option>
+              ))}
+            </select>
         </div>
       </div>
 
-      {loading ? (
-        <p className="loading-text">Buscando dados do sensor...</p>
+      {listaSensores.length === 0 ? (
+        <p className="loading-text">Aguardando dados de algum sensor...</p>
+      ) : loading ? (
+        <p className="loading-text">
+          Buscando dados do sensor {sensorSelecionado}...
+        </p>
       ) : (
-        <>
+        <div>
           <div className="chart-section">
-            <h3 className="chart-title temp">Temperatura (°C) - {sensorSelecionado}</h3>
+            <h3 className="chart-title temp">
+              Temperatura (°C) - {sensorSelecionado}
+            </h3>
             <div style={{ width: "100%", height: 300 }}>
               <ResponsiveContainer>
                 <LineChart data={dados}>
@@ -117,10 +151,10 @@ const GraficosSensores = () => {
               </ResponsiveContainer>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
 };
 
-export default GraficosSensores;
+export default Grafico;

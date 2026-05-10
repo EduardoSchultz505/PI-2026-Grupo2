@@ -14,7 +14,7 @@ export default function Login() {
     }
   }, [navigate]);
 
-  const handleSubmit = async (e) => {
+  const entrar = async (e) => {
     e.preventDefault();
 
     try {
@@ -30,17 +30,16 @@ export default function Login() {
         localStorage.setItem("user_id", data.user_id); 
         localStorage.setItem("userName", data.username);
         localStorage.setItem("userEmail", email);
-        
-        localStorage.setItem("userToken", "logado-com-sucesso");
+        localStorage.setItem("userToken", "logado");
 
-        alert(data.message || `Bem vindo de volta ${data.username}!`);
+        alert(`Bem vindo de volta ${data.username}!`);
         navigate("/dashboard");
       } else {
-        alert(`Erro: ${data.detail || "E-mail ou senha incorretos"}`);
+        alert("E-mail ou senha incorretos");
       }
     } catch (error) {
       console.error("Erro na conexão:", error);
-      alert("Não foi possível conectar ao servidor Python. Verifique se o backend está rodando.");
+      alert("Não foi possível conectar ao servidor.");
     }
   };
 
@@ -50,7 +49,7 @@ export default function Login() {
         <h1>SiloTech</h1>
         <p>Bem-vindo de volta!</p>
 
-        <form className="login-form" onSubmit={handleSubmit}>
+        <form className="login-form" onSubmit={entrar}>
           <div className="input-group">
             <label htmlFor="email">E-mail</label>
             <input

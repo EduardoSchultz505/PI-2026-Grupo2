@@ -9,7 +9,7 @@ export default function Cadastro() {
   const [adminKey, setAdminKey] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const enviarCadastro = async (e) => {
     e.preventDefault();
 
     try {
@@ -19,7 +19,7 @@ export default function Cadastro() {
         body: JSON.stringify({ username, email, password, admin_key: adminKey }),
       });
 
-      const data = await response.json();
+      await response.json();
 
       if (response.ok) {
         localStorage.setItem('userToken', 'logado');
@@ -27,14 +27,13 @@ export default function Cadastro() {
         localStorage.setItem('userEmail', email);
 
         alert("Conta criada com sucesso!");
-        navigate('/dashboard');
+        navigate('/conta');
       } else {
-        const errorMsg = Array.isArray(data.detail) ? data.detail[0].msg : data.detail;
-        alert(`Erro: ${errorMsg || "Erro ao cadastrar"}`);
+        alert("Erro ao cadastrar");
       }
     } catch (error) {
       console.error("Erro na conexão:", error);
-      alert("Não foi possível conectar ao servidor Python.");
+      alert("Não foi possível conectar ao servidor");
     }
   };
 
@@ -42,9 +41,9 @@ export default function Cadastro() {
     <div className="login-container">
       <div className="login">
         <h1>SiloTech</h1>
-        <p>Painel Administrativo - Cadastro</p>
+        <p>Cadastro - Admins</p>
 
-        <form className="login-form" onSubmit={handleSubmit}>
+        <form className="login-form" onSubmit={enviarCadastro}>
           <div>
             <label htmlFor="email">E-mail</label>
             <input

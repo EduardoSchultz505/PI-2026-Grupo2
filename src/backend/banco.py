@@ -7,11 +7,9 @@ from passlib.context import CryptContext
 from datetime import datetime
 import pytz
 
-
 ADMIN_SECRET_KEY = "$pbkdf2-sha256$29000$8/7f.58TIkTonZOydo4xhg$DAEhYqNr9TIRoABeC9jIW5T2T6jtTNGVvjH7WP8vak8"
-SQLALCHEMY_DATABASE_URL = "sqlite:///./silotech.db"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine("sqlite:///./silotech.db", connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
@@ -22,7 +20,6 @@ class User(Base):
     username = Column(String)
     email = Column(String, unique=True, index=True)
     password = Column(String)
-    
     leituras = relationship("Leitura", back_populates="dono")
 
 class Leitura(Base):
@@ -31,7 +28,7 @@ class Leitura(Base):
     sensor_nome = Column(String, index=True) 
     temperatura = Column(Float)
     umidade = Column(Float)
-    horario = Column(DateTime, default=lambda: datetime.now(pytz.timezone('America/Sao_Paulo')))
+    horario = Column(DateTime)
     owner_id = Column(Integer, ForeignKey("users.id"))
     
     dono = relationship("User", back_populates="leituras")
@@ -40,7 +37,7 @@ Base.metadata.create_all(bind=engine)
 
 class UserCreate(BaseModel):
     username: str = Field(..., min_length=3)
-    email: str
+    email: str = Field(...)
     password: str = Field(..., min_length=8)
     admin_key: str 
 
@@ -113,7 +110,7 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         "user_id": user.id 
     }
 
-@app.post("/sensor/leitura")
+@app.post("/sensor/leitura") #gui10 usa esse para mandar as leituras para o db
 def adicionar_leitura(request: LeituraCreate, db: Session = Depends(get_db)):
     if not db.query(User).filter(User.id == request.owner_id).first():
         raise HTTPException(status_code=404, detail="Usuário dono não encontrado.")
@@ -152,3 +149,11 @@ def obter_historico_pessoal(usuario_id: int, sensor: str, db: Session = Depends(
     ).order_by(desc(Leitura.horario)).limit(12).all()
     
     return dados
+
+@app.get("/sensor/lista-sensores/{usuario_id}")
+def listar_sensores_usuario(usuario_id: int, db: Session = Depends(get_db)):
+    sensores = db.query(Leitura.sensor_nome).filter(
+        Leitura.owner_id == usuario_id
+    ).distinct().all()
+    
+    return [s[0] for s in sensores]

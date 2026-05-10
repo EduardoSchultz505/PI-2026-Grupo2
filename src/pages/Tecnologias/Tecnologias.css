@@ -1,33 +1,17 @@
-.hero2 {
-	background-color: #222;
-	padding: 80px 150px;
-	height: 350px;
-	display: flex;
-	align-items: center;
-	color: #f0f0f0;
+.tecnologias-hero {
+  background: #179c6c;
+  color: #ffffff;
+  text-align: center;
+  padding: 80px 20px;
 }
 
-.hero2 span {
-	background-color: #153429;
-	padding: 12px 16px;
-	border: 1px solid #11543c;
-	border-radius: 20px;
-	font-size: 14px;
-	color: #00ff99;
+.tecnologias-hero h1 {
+  font-size: 48px;
+  margin-bottom: 10px;
 }
 
-.hero2-text {
-	width: 800px;
-}
-
-.hero2 h1 {
-	margin: 20px 0;
-	font-size: 45px;
-}
-
-.hero2 p {
-	font-weight: 100;
-	font-size: 21px;
+.tecnologias-hero p {
+  font-size: 20px;
 }
 
 .arquitetura {

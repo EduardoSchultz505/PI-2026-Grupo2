@@ -9,11 +9,10 @@ import { Link } from "react-router-dom";
 export default function Tecnologias() {
   return (
     <div>
-      <section className="hero2">
-        <div className="hero2-text">
-          <span>Inovação & Engenharia</span>
-          <h1>Tecnologia de Ponta Para o Agronegócio</h1>
-          <p>Uma combinação de hardware robusto, software inteligente e infraestrutura em nuvem escalável para oferecer o melhor em gestão de silos.</p>
+      <section>
+        <div className="tecnologias-hero">
+          <h1>Tecnologia de Ponta</h1>
+          <p>Uma combinação de hardware robusto e software inteligente para oferecer o melhor em gestão de silos.</p>
         </div>
       </section>
 
@@ -27,25 +26,19 @@ export default function Tecnologias() {
             <div>
               <CiWifiOn />
               <h3>Camada de Sensores</h3>
-              <p>Rede de sensores IoT para coleta de dados em tempo real.</p>
+              <p>Rede de sensores para coleta de dados em tempo real.</p>
             </div>
 
             <div>
               <CiServer />
-              <h3>Processamento Edge</h3>
-              <p>Processamento local garantindo funcionamento offline.</p>
+              <h3>Processamento</h3>
+              <p>Processamento local garantindo.</p>
             </div>
 
             <div>
               <FiShield />
               <h3>Cloud Segura</h3>
-              <p>Infraestrutura escalável com backups automáticos.</p>
-            </div>
-
-            <div>
-              <IoFlashOutline />
-              <h3>Analytics & IA</h3>
-              <p>Modelos que geram insights inteligentes.</p>
+              <p>Segurança de ponta com seus dados</p>
             </div>
           </div>
       </section>

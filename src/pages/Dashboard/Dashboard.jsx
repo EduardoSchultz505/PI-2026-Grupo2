@@ -16,16 +16,15 @@ export default function Dashboard() {
       <section className="Dashboard">
         <h2>Dashboard</h2>
         <p>Bem-vindo ao seu painel de controle!</p>
-        <Grafico sensorId="sala_01" />
+        <Grafico />
       </section>
       <div>
-      <h1>Olá, {nomeUsuario || "Visitante"}!</h1>
-      <p>Bem-vindo ao SiloTech.</p>
-      <button onClick={handleLogout} className="botao-sair">
-        Sair da Conta
-      </button>
-    </div>
+        <h1>Olá, {nomeUsuario || "Visitante"}!</h1>
+        <p>Bem-vindo ao SiloTech.</p>
+        <button onClick={handleLogout} className="botao-sair">
+          Sair da Conta
+        </button>
+      </div>
     </div>
   );
 }
-

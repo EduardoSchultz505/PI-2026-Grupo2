@@ -1,35 +1,27 @@
-.sobre-container {
-  font-family: "Miranda Sans", sans-serif;
-  background-color: #f5f7f6;
-  color: #121212;
-}
-
-/* HEADER */
-.sobre-header {
-  padding: 80px 40px;
-  background: linear-gradient(to right, #121212, #2c2c2c);
-  color: #f5f7f6;
+.sobre-hero {
+  background: #179c6c;
+  color: #ffffff;
   text-align: center;
+  padding: 80px 20px;
 }
 
-.sobre-header h1 {
+.sobre-hero h1 {
   font-size: 48px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
-.sobre-header p {
-  color: #a1a1a1;
-  max-width: 600px;
-  margin: 0 auto;
+.sobre-hero p {
+  font-size: 20px;
 }
 
-/* BLOCO */
 .sobre-bloco {
   display: flex;
   align-items: center;
   justify-content: space-around;
   padding: 80px 40px;
   gap: 40px;
+  line-height: 1.5;
+  font-size: large;
 }
 
 .sobre-bloco img {
@@ -43,6 +35,10 @@
   max-width: 500px;
 }
 
+.sobre-bloco .texto p{
+  text-indent: 40px;
+}
+
 .sobre-bloco h2 {
   font-size: 32px;
   margin-bottom: 10px;
@@ -52,7 +48,6 @@
   color: #757575;
 }
 
-/* CARDS */
 .sobre-cards {
   display: flex;
   justify-content: center;
@@ -77,7 +72,6 @@
   color: #757575;
 }
 
-/* DIFERENCIAL */
 .sobre-diferencial {
   padding: 80px 40px;
   text-align: center;
