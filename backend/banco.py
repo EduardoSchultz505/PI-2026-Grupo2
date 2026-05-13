@@ -5,7 +5,6 @@ from sqlalchemy.orm import sessionmaker, Session, declarative_base, relationship
 from pydantic import BaseModel, Field
 from passlib.context import CryptContext
 from datetime import datetime
-import pytz
 
 ADMIN_SECRET_KEY = "$pbkdf2-sha256$29000$8/7f.58TIkTonZOydo4xhg$DAEhYqNr9TIRoABeC9jIW5T2T6jtTNGVvjH7WP8vak8"
 
@@ -28,7 +27,7 @@ class Leitura(Base):
     sensor_nome = Column(String, index=True) 
     temperatura = Column(Float)
     umidade = Column(Float)
-    horario = Column(DateTime)
+    horario = Column(DateTime, default=datetime.utcnow)
     owner_id = Column(Integer, ForeignKey("users.id"))
     
     dono = relationship("User", back_populates="leituras")

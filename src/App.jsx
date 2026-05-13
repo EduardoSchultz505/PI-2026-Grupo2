@@ -8,7 +8,7 @@ import Login from "./pages/Login/Login.jsx";
 import Cadastro from "./pages/Cadastro/Cadastro.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
 import SobreNos from "./pages/SobreNos/SobreNos.jsx"
-//import Conta from "./pages/Conta/Conta.jsx"
+import Conta from "./pages/Conta/Conta.jsx";
 import Grafico from "./pages/Dashboard/Grafico.jsx"; 
 import ScrollToTop from "./components/Scroll.jsx";
 import Perguntas from "./pages/Perguntas/Perguntas.jsx";
@@ -25,7 +25,7 @@ function App() {
         <Route path="/login" element={<Login />}/>
         <Route path="/cadastro" element={<Cadastro />}/>
         <Route path="/sobrenos" element={<SobreNos />} />
-        {/*<Route path="/conta" element={<Conta />} /> */}
+        <Route path="/conta" element={<Conta />} />
         <Route path="/dashboard" element={<Grafico/>} />
         <Route path="/perguntas" element={<Perguntas />}/>
         <Route path="*" element={<NotFound />} />
