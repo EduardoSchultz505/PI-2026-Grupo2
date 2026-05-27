@@ -1,15 +1,6 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 .conta-page-wrapper {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
-  background: #f5f7f9;
-  color: #0f172a;
-  font-family: Arial, sans-serif;
 }
 
 .conta-sidebar {
