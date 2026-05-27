@@ -1,0 +1,148 @@
+body {
+  margin: 0;
+  font-family: "Miranda Sans", sans-serif;
+  font-weight: 500;
+  color: #121212;
+  background-color: #f5f7f6;
+}
+
+.hero {
+  width: 100%;
+  height: 90vh;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3)), url("../../assets/Hero.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+}
+
+.hero-conteudo {
+  height: 260px;
+  width: 42%;
+  margin-left: 80px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.hero-conteudo h1 {
+  color: #f5f7f6;
+  font-size: 64px
+}
+
+.hero p {
+  color: #a1a1a1;
+  font-size: 20px;
+}
+
+.iniciar {
+  width: 120px;
+  text-align: center;
+  background-color: #27ae60;
+  color: #f5f7f6;
+  padding: 12px;
+  font-size: 18px;
+  border-radius: 8px;
+}
+
+.section2 {
+  height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.section2 img {
+  height: 500px;
+  width: 600px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.texto2 {
+  width: 580px;
+  height: 280px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.texto2 h1 {
+  font-size: 36px;
+}
+
+.texto2 p {
+  color: #757575;
+}
+
+.Tecnologia {
+  color: #1e8449;
+  font-weight: 700;
+  align-items: center ;
+}
+
+.items {
+  display: flex;
+  gap: 8px;
+  color: #757575;
+  margin-bottom: 8px;
+}
+
+.items svg {
+  font-size: 20px;
+  color: green;
+  text-align: center;
+}
+
+.section3 {
+  padding: 80px 40px;
+  background-color: #f2f2f2;
+  text-align: center;
+}
+
+.section3 h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.section3 p {
+  color: #757575;
+  width: 350px;
+  margin: 0 auto 50px;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.cards div {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 30px;
+  width: 300px;
+  text-align: left;
+}
+
+.cards svg {
+  font-size: 30px;
+  color: #16a34a;
+  background-color: #dcfce7;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.cards h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.cards p {
+  width: 300px;
+  color: #757575;
+}
