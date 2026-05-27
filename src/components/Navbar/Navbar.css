@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+}
+
+nav {
+  background-color: #ffffff;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 50px;
+  position: sticky;
+  top: 0;
+  box-sizing: border-box; 
+}
+
+.url {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+a {
+  color: #4a4a4a;
+  text-decoration: none;
+}
+
+.Mains {
+  display: flex;
+  align-items: center;
+  font-weight: 800;
+  font-size: x-large;
+  color: #1a1a1a;
+}
+
+.Login {
+  display: inline-block;
+  background-color: #0f9d58;
+  padding: 12px 24px;
+  border-radius: 8px;
+  color: #f5f7f6;
+  text-align: center;
+  width: 50px;
+}
+
+.direita {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
