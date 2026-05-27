@@ -23,6 +23,16 @@ export default function Perguntas() {
             <summary>Onde a SiloTech está localizada?</summary>
             <p>Concórdia - SC, Brasil.</p>
           </details>
+          
+          <details className="item">
+            <summary>O sistema emite alertas automaticamente?</summary>
+            <p>Sim. Quando valores críticos de temperatura ou umidade são detectados, o sistema gera alertas na interface web para avisar o usuário sobre possíveis riscos no armazenamento dos grãos.</p>
+          </details>
+
+          <details className="item">
+            <summary>É possível visualizar dados antigos das leituras?</summary>
+            <p>Sim. O sistema armazena todas as leituras no banco de dados SQLite, permitindo consultar o histórico de temperatura, umidade e níveis de risco por meio da interface web.</p>
+          </details>
 
         </div>
       </section>
