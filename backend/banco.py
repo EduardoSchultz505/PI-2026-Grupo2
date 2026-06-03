@@ -156,3 +156,55 @@ def listar_sensores_usuario(usuario_id: int, db: Session = Depends(get_db)):
     ).distinct().all()
     
     return [s[0] for s in sensores]
+
+@app.get("/sensor/alertas/{usuario_id}")
+def gerar_alertas(usuario_id: int, db: Session = Depends(get_db)):
+    alertas = []
+
+    sensores = db.query(Leitura.sensor_nome).filter(
+        Leitura.owner_id == usuario_id
+    ).distinct().all()
+
+    for sensor in sensores:
+        nome_sensor = sensor[0]
+
+        ultima_leitura = db.query(Leitura).filter(
+            Leitura.owner_id == usuario_id,
+            Leitura.sensor_nome == nome_sensor
+        ).order_by(desc(Leitura.horario)).first()
+
+        if not ultima_leitura:
+            continue
+
+        if ultima_leitura.temperatura > 30:
+            alertas.append({
+                "sensor": nome_sensor,
+                "tipo": "temperatura",
+                "mensagem": f"Temperatura alta ({ultima_leitura.temperatura}°C)"
+            })
+
+        if ultima_leitura.temperatura < 10:
+            alertas.append({
+                "sensor": nome_sensor,
+                "tipo": "temperatura",
+                "mensagem": f"Temperatura baixa ({ultima_leitura.temperatura}°C)"
+            })
+
+        if ultima_leitura.umidade > 80:
+            alertas.append({
+                "sensor": nome_sensor,
+                "tipo": "umidade",
+                "mensagem": f"Umidade alta ({ultima_leitura.umidade}%)"
+            })
+
+        if ultima_leitura.umidade < 30:
+            alertas.append({
+                "sensor": nome_sensor,
+                "tipo": "umidade",
+                "mensagem": f"Umidade baixa ({ultima_leitura.umidade}%)"
+            })
+
+    return {
+        "total_alertas": len(alertas),
+        "alertas": alertas
+    }
