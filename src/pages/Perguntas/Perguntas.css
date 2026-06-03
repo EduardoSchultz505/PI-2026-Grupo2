@@ -7,7 +7,6 @@
   align-items: center;
 }
 
-/* TÍTULO */
 
 .perguntas-hero h1 {
   font-size: 4rem;
@@ -48,8 +47,6 @@
   max-width: 1150px;
 }
 
-/* FAQ CARD */
-
 .item {
   background: white;
   border-radius: 18px;
@@ -73,8 +70,6 @@
   border-color: rgba(0, 153, 102, 0.35);
 }
 
-/* SUMMARY */
-
 .item summary {
   list-style: none;
   cursor: pointer;
@@ -96,8 +91,6 @@
 .item summary::-webkit-details-marker {
   display: none;
 }
-
-/* BOTÃO + */
 
 .item summary::after {
   content: "+";
@@ -123,8 +116,6 @@
   margin-left: 20px;
 }
 
-/* QUANDO ABRE */
-
 .item[open] {
   border-color: #009966;
 }
@@ -138,8 +129,6 @@
   background: #003049;
 }
 
-/* RESPOSTA */
-
 .item p {
   padding: 0 28px 28px;
 
@@ -150,8 +139,6 @@
 
   animation: fade 0.3s ease;
 }
-
-/* ANIMAÇÃO */
 
 @keyframes fade {
   from {
@@ -164,8 +151,6 @@
     transform: translateY(0);
   }
 }
-
-/* RESPONSIVO */
 
 @media (max-width: 768px) {
 
