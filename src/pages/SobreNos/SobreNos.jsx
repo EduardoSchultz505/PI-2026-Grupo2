@@ -71,9 +71,7 @@ export default function Sobre() {
           <li>Integração com sensores físicos</li>
         </ul>
       </section>
-        <button onClick={sair} className="botao-sair">
-        Sair da Conta
-      </button>
+        
     </div>
   )
 }

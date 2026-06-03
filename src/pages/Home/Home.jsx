@@ -15,7 +15,7 @@ export default function HomePage() {
           <p>Transformando a gestão de armazenamento agrícola com
           tecnologia de ponta. Monitoramento inteligente, controle total
           e eficiência para sua produção.</p>
-          <Link className="iniciar" to="/cadastro">Iniciar Agora</Link>
+          <Link className="iniciar" to="/login">Iniciar Agora</Link>
         </div>
       </section>
       <section className="section2">
