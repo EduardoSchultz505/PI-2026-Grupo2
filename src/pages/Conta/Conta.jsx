@@ -15,9 +15,7 @@ function Monitoramento() {
   const navigate = useNavigate();
   const usuarioId = localStorage.getItem("user_id");
   const [loading, setLoading] = useState(true);
-  const [resumo, setResumo] = useState({
-    totalSensores: 0,
-  });
+  const [resumo, setResumo] = useState({totalSensores: 0,});
   const [alertas, setAlertas] = useState([]);
   const [sensores, setSensores] = useState([]);
   const [leituras, setLeituras] = useState({});
@@ -49,9 +47,7 @@ function Monitoramento() {
 
       setSensores(listaSensores);
 
-      setResumo({
-        totalSensores: listaSensores.length,
-      });
+      setResumo({totalSensores: listaSensores.length,});
 
       for (const sensor of listaSensores) {
         buscarHistorico(sensor);
@@ -101,14 +97,12 @@ function Monitoramento() {
   if (!usuarioId) {
     return <h2 className="loading-text">Faça login para ver seus dados.</h2>;
   }
-
   if (loading) {
     return <div className="loading">Carregando dados...</div>;
   }
 
   return (
     <div className="conta-page-wrapper">
-      <main className="conta-main-content">
         <div className="content-container-center">
           <header className="content-header">
             <h2>Minha Conta</h2>
@@ -129,37 +123,28 @@ function Monitoramento() {
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon">
-                <LuActivity size={24} />
-              </div>
+              <div className="stat-icon"><LuActivity size={24} /></div>
 
               <div>
                 <span className="stat-value">{statusSistema}</span>
-
                 <span className="stat-label">Status do Sistema</span>
               </div>
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon">
-                <LuBell size={24} />
-              </div>
-
+              <div className="stat-icon"><LuBell size={24} /></div>
               <div>
                 <span className="stat-value">{alertas.length}</span>
-
                 <span className="stat-label">Alertas Críticos</span>
               </div>
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon">
-                <LuActivity size={24} />
-              </div>
+              <div className="stat-icon"><LuActivity size={24} /></div>
 
               <div>
                 <span className="stat-value">
-                  {new Date(ultimaLeituraGlobal.horario).toLocaleTimeString()}
+                  {ultimaLeituraGlobal ? new Date(ultimaLeituraGlobal.horario).toLocaleTimeString() : "--:--"}
                 </span>
 
                 <span className="stat-label">Última Leitura</span>
@@ -286,7 +271,6 @@ function Monitoramento() {
                           <p>Sem leituras disponíveis.</p>
                         )}
                       </div>
-
                       <LuChevronRight />
                     </div>
                   );
@@ -301,7 +285,6 @@ function Monitoramento() {
             </button>
           </div>
         </div>
-      </main>
     </div>
   );
 }

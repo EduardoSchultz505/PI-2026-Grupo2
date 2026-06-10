@@ -176,7 +176,7 @@ def gerar_alertas(usuario_id: int, db: Session = Depends(get_db)):
         if not ultima_leitura:
             continue
 
-        if ultima_leitura.temperatura > 30:
+        if ultima_leitura.temperatura > 20:
             alertas.append({
                 "sensor": nome_sensor,
                 "tipo": "temperatura",
@@ -190,14 +190,14 @@ def gerar_alertas(usuario_id: int, db: Session = Depends(get_db)):
                 "mensagem": f"Temperatura baixa ({ultima_leitura.temperatura}°C)"
             })
 
-        if ultima_leitura.umidade > 80:
+        if ultima_leitura.umidade > 14:
             alertas.append({
                 "sensor": nome_sensor,
                 "tipo": "umidade",
                 "mensagem": f"Umidade alta ({ultima_leitura.umidade}%)"
             })
 
-        if ultima_leitura.umidade < 30:
+        if ultima_leitura.umidade < 12:
             alertas.append({
                 "sensor": nome_sensor,
                 "tipo": "umidade",
