@@ -89,11 +89,6 @@
   transition: .2s;
 }
 
-.action-item:hover {
-  box-shadow: 0 4px 15px rgba(0,0,0,.08);
-  transform: translateY(-2px);
-}
-
 .action-info {
   flex: 1;
 }

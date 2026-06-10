@@ -136,7 +136,7 @@ function Grafico() {
                 <LineChart data={dados}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
                   <XAxis dataKey="horaFormatada" />
-                  <YAxis domain={[0, 100]} />
+                  <YAxis domain={["auto", "auto"]} />
                   <Tooltip />
                   <Legend />
                   <Line
