@@ -33,7 +33,7 @@ export default function Login() {
         localStorage.setItem("userToken", "logado");
 
         alert(`Bem vindo de volta ${data.username}!`);
-        navigate("/dashboard");
+        navigate("/conta");
       } else {
         alert("E-mail ou senha incorretos");
       }

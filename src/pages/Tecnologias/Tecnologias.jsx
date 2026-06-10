@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 export default function Tecnologias() {
   return (
-    <div>
+    <div className="tecnologias">
       <section>
         <div className="tecnologias-hero">
           <h1>Tecnologia de Ponta</h1>
@@ -50,19 +50,39 @@ export default function Tecnologias() {
         </div>
 
           <div className="cards-tecnologia">
-            <div>
-              <h3>Sensores & Hardware</h3>
-              <p>Temperatura</p>
-              <p>Umidade</p>
-              <p>Conectividade</p>
-            </div>
+    <div>
+      <h3>Sensores & Hardware</h3>
+      <p>Sensor de Temperatura</p>
+      <p>Sensor de Umidade</p>
+      <p>Microcontroladores</p>
+      <p>Conectividade Wi-Fi</p>
+      <p>Baixo consumo de energia</p>
+    </div>
 
-            <div>
-              <h3>Software & Cloud</h3>
-              <p>React</p>
-              <p>SQLite</p>
-            </div>
-          </div>
+    <div>
+      <h3>Software & Cloud</h3>
+      <p>React para interface web</p>
+      <p>Python com FastAPI</p>
+      <p>SQLite para armazenamento</p>
+      <p>Atualização de dados em tempo real</p>
+    </div>
+
+    <div>
+      <h3>Inteligência & Monitoramento</h3>
+      <p>Gráficos em tempo real</p>
+      <p>Histórico de medições</p>
+      <p>Alertas de temperatura e umidade</p>
+      <p>Análise contínua dos dados</p>
+      <p>Dashboard intuitivo</p>
+    </div>
+
+    <div>
+      <h3>Segurança & Confiabilidade</h3>
+      <p>Autenticação de usuários</p>
+      <p>Armazenamento seguro</p>
+      <p>Alta disponibilidade do sistema</p>
+    </div>
+  </div>
       </section>
 
       <section className="inovacao">
@@ -78,7 +98,7 @@ export default function Tecnologias() {
             <li>Feedback direto dos clientes no roadmap</li>
           </ul>
 
-          <Link className="botao-especialista">Fale com Especialistas</Link>
+          <Link className="botao-especialista" to={'/contato'}>Fale com Especialistas</Link>
         </div>
 
         <div className="trator-2">

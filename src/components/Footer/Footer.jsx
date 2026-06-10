@@ -21,10 +21,12 @@ function Footer () {
 
         <div className="footer-item">
           <h3>Empresa</h3>
+            <Link to={"/home"}>Início</Link>
+            <Link to={"/tecnologia"}>Técnologias</Link>
             <Link to={"/sobrenos"}>Sobre nós</Link>
             <Link to={"/contato"}>Contato</Link>
-            <Link to={"/cadastro"}>Acesso Admin</Link>
             <Link to={"/perguntas"}>Perguntas Frequentes</Link>
+            <Link to={"/cadastro"}>Acesso Admin</Link>
         </div>
 
         <div className="footer-item">

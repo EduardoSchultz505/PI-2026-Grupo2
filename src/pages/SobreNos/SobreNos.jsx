@@ -1,14 +1,6 @@
 import "./SobreNos.css";
-import { useNavigate } from "react-router-dom";
 import Silo from "../../assets/Silo.png"
 export default function Sobre() {
-  const navigate = useNavigate();
-
-  function sair() {
-    localStorage.clear();
-    navigate("/login");
-  };
-
   return (
     <div className="sobre-container">
       <section className="sobre-hero">
@@ -31,7 +23,7 @@ export default function Sobre() {
           </p>
           <p>
             O projeto foi desenvolvido por estudantes do Curso Técnico em Informática do Instituto Federal Catarinense
-            — Campus Concórdia, unindo tecnologia e agronegócio para criar uma solução acessível, eficiente e de baixo custo.
+            — Campus Concórdia, unindo técnologia e agronegócio para criar uma solução acessível, eficiente e de baixo custo.
           </p>
         </div>
 
