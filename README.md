@@ -2,6 +2,15 @@
 
 O **SiloTech** é uma plataforma full-stack desenvolvida para o monitoramento inteligente de silos. O sistema permite o cadastro de usuários com validação administrativa, autenticação segura e a visualização de dados críticos coletados por sensores em tempo real.
 
+### Participantes
+* Eduardo Schultz de Oliveira
+* Evelyn Maria Mafessoni Thomaz
+* Guilherme Otávio Riffel König
+* Isabela Vitória Fracaro
+* Kaiky Vieira
+* Luiz Eduardo Ramisch Teixeira
+* Samuel Henrique Ramisch Teixeira
+
 ### Captura de Tela
 
 imagem dos graficos
@@ -45,7 +54,11 @@ imagem dos graficos
 *   Python 3.10 ou superior instalado.
 
 ### 2. Configurando o Backend
-Navegue até a pasta do backend e instale as dependências:
+Navegue até a pasta do backend:
+```bash
+cd ./backend
+```
+Instale as dependências:
 ```bash
 pip install fastapi uvicorn sqlalchemy passlib[bcrypt] pydantic requests
 ```
@@ -55,11 +68,7 @@ python -m uvicorn banco:app --reload
 ```
 
 ### 3. Configurando o Frontend
-Abra um novo terminal (mantenha o do Python rodando) e navegue até a pasta do seu projeto React:
-```bash
-cd PI-2026-Grupo2
-```
-Instale as dependências do Node:
+Abra um novo terminal na pasta raiz e instale as dependências do Node:
 ```bash
 npm install
 ```
@@ -67,4 +76,4 @@ Inicie o servidor de desenvolvimento do Vite:
 ```bash
 npm run dev
 ```
-O terminal informará um endereço (http://localhost:5173). Abra este link no seu navegador.
+O terminal informará um endereço (http://localhost:5173). Abra este link no navegador.
