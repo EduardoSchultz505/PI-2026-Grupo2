@@ -9,17 +9,17 @@ import "./Home.css"
 export default function HomePage() {
   return (
     <div>
-      <section className="hero">
-        <div className="hero-conteudo">
+      <section className="home-hero">
+        <div className="home-conteudo">
           <h1>SiloTech</h1>
           <p>Transformando a gestão de armazenamento agrícola com
           tecnologia de ponta. Monitoramento inteligente, controle total
           e eficiência para sua produção.</p>
-          <Link className="iniciar" to="/login">Iniciar Agora</Link>
+          <Link className="home-iniciar" to="/login">Iniciar Agora</Link>
         </div>
       </section>
-      <section className="section2">
-        <div className="texto2">
+      <section className="home-section2">
+        <div className="home-texto2">
           <h1>Controle Total da Sua Produção</h1>
           <p>Nossa plataforma integrada oferece visibilidade completa do armazenamento, desde a temperatura até a umidade dos grãos.</p>
           <div>
@@ -28,17 +28,17 @@ export default function HomePage() {
             <div className="items"><FaRegCircleCheck/><span>Relatórios detalhados de performance</span></div>
             <div className="items"><FaRegCircleCheck/><span>Integração com sistemas de gestão existentes</span></div>
           </div>          
-          <Link to="/tecnologia" className="Tecnologia">Veja nossa Tecnologia  <FaArrowRight/></Link>
+          <Link to="/tecnologia" className="home-tecnologia">Veja nossa Tecnologia  <FaArrowRight/></Link>
         </div>
         <img src={Trator}></img>
       </section>
 
-      <section className="section3">
+      <section className="home-section3">
         <div>
           <h1>Por Que Escolher a SiloTech?</h1>
           <p>Soluções desenvolvidas especificamente para os desafios do armazenamento agrícola</p>
         </div>
-        <div className="cards">
+        <div className="home-cards">
           <div>
             <GoGraph/>
             <h2>Análise Inteligente</h2>

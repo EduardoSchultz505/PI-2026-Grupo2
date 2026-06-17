@@ -86,26 +86,40 @@ export default function Tecnologias() {
       </section>
 
       <section className="inovacao">
-        <div>
-          <h1>Inovação Contínua</h1>
-          <p>Nossa equipe de engenheiros e cientistas de dados trabalha constantemente para melhorar nossa tecnologia e adicionar novos recursos.</p>
-          <p>Investimos 20% da nossa receita em P&D para garantir que você sempre tenha acesso às soluções mais avançadas do mercado.</p>
+  <div>
+    <h1>Inovação Contínua</h1>
 
-          <ul>
-            <li>Atualizações automáticas de firmware via OTA</li>
-            <li>Novos recursos lançados trimestralmente</li>
-            <li>Pesquisa em parceria com universidades</li>
-            <li>Feedback direto dos clientes no roadmap</li>
-          </ul>
+    <p>
+      Acreditamos que a inovação é fundamental para transformar o agronegócio.
+      Por isso, buscamos constantemente aprimorar nossas soluções, explorando
+      novas tecnologias e métodos que contribuam para maior eficiência no campo.
+    </p>
 
-          <Link className="botao-especialista" to={'/contato'}>Fale com Especialistas</Link>
-        </div>
+    <p>
+      Nosso compromisso é desenvolver ferramentas modernas, acessíveis e
+      alinhadas às necessidades dos produtores, mantendo o foco na qualidade,
+      praticidade e evolução contínua dos nossos projetos.
+    </p><br></br>
 
-        <div className="trator-2">
-          <img src={Trator2} alt="Máquina agrícola"/>
-        </div>
+    <p className="tec-objetivos">Nosso objetivos são:</p>
 
-      </section>
+    <ul>
+      <li>Desenvolvimento contínuo de novas funcionalidades</li>
+      <li>Aplicação de tecnologias voltadas à automação agrícola</li>
+      <li>Pesquisa e estudo de tendências do setor agropecuário</li>
+      <li>Melhoria constante baseada em testes e avaliações</li>
+      <li>Foco em soluções inovadoras, eficientes e sustentáveis</li>
+    </ul>
+
+    <Link className="botao-especialista" to={'/contato'}>
+      Fale Conosco
+    </Link>
+  </div>
+
+  <div className="trator-2">
+    <img src={Trator2} alt="Máquina agrícola" />
+  </div>
+</section>
     </div>
   );
 }

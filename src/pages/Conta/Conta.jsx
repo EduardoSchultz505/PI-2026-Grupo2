@@ -222,11 +222,11 @@ function Monitoramento() {
                         {ultima ? (
                           <>
                             <p>
-                              Temperatura: {ultima.temperatura.toFixed(1)}
+                              Temperatura: {ultima.temperatura}
                               °C
                             </p>
 
-                            <p>Umidade: {ultima.umidade.toFixed(1)}%</p>
+                            <p>Umidade: {ultima.umidade}%</p>
 
                             <small>
                               Última leitura:
@@ -248,12 +248,12 @@ function Monitoramento() {
                                     >
                                       <span>
                                         Temperatura{" "}
-                                        {item.temperatura.toFixed(1)}
+                                        {item.temperatura}
                                         °C
                                       </span>
 
                                       <span>
-                                        Umidade {item.umidade.toFixed(1)}%
+                                        Umidade {item.umidade}%
                                       </span>
 
                                       <small>

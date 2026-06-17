@@ -6,19 +6,22 @@ body {
   background-color: #f5f7f6;
 }
 
-.hero {
+a {
+  text-decoration: none;
+}
+
+.home-hero {
   width: 100%;
   height: 90vh;
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3)), url("../../assets/Hero.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
   display: flex;
   align-items: center;
 }
 
-.hero-conteudo {
+.home-conteudo {
   height: 260px;
   width: 42%;
   margin-left: 80px;
@@ -27,17 +30,18 @@ body {
   flex-direction: column;
 }
 
-.hero-conteudo h1 {
+.home-conteudo h1 {
   color: #f5f7f6;
-  font-size: 64px
+  font-size: 64px;
+  margin: 0;
 }
 
-.hero p {
+.home-conteudo p {
   color: #a1a1a1;
   font-size: 20px;
 }
 
-.iniciar {
+.home-iniciar {
   width: 120px;
   text-align: center;
   background-color: #27ae60;
@@ -45,90 +49,103 @@ body {
   padding: 12px;
   font-size: 18px;
   border-radius: 8px;
+  transition: background 0.2s ease;
 }
 
-.section2 {
+.home-iniciar:hover {
+  background-color: #219653;
+}
+
+.home-section2 {
   height: 700px;
   display: flex;
   align-items: center;
   justify-content: space-around;
+  padding: 0 40px;
 }
 
-.section2 img {
+.home-section2 img {
   height: 500px;
   width: 600px;
   object-fit: cover;
   border-radius: 16px;
 }
 
-.texto2 {
+.home-texto2 {
   width: 580px;
-  height: 280px;
+  height: auto;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  gap: 20px;
 }
 
-.texto2 h1 {
+.home-texto2 h1 {
   font-size: 36px;
+  margin: 0;
 }
 
-.texto2 p {
+.home-texto2 p {
   color: #757575;
+  margin: 0;
 }
 
-.Tecnologia {
+.home-tecnologia {
   color: #1e8449;
   font-weight: 700;
-  align-items: center ;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .items {
   display: flex;
+  align-items: center;
   gap: 8px;
   color: #757575;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .items svg {
   font-size: 20px;
   color: green;
-  text-align: center;
 }
 
-.section3 {
+.home-section3 {
   padding: 80px 40px;
   background-color: #f2f2f2;
   text-align: center;
 }
 
-.section3 h1 {
+.home-section3 h1 {
   font-size: 32px;
   margin-bottom: 10px;
 }
 
-.section3 p {
+.home-section3 p {
   color: #757575;
-  width: 350px;
+  max-width: 500px;
   margin: 0 auto 50px;
 }
 
-.cards {
+.home-cards {
   display: flex;
   justify-content: center;
   gap: 30px;
+  flex-wrap: wrap;
 }
 
-.cards div {
+.home-cards div {
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
   padding: 30px;
   width: 300px;
   text-align: left;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
-.cards svg {
+.home-cards svg {
   font-size: 30px;
   color: #16a34a;
   background-color: #dcfce7;
@@ -137,12 +154,16 @@ body {
   margin-bottom: 15px;
 }
 
-.cards h2 {
+.home-cards h2 {
   font-size: 18px;
   margin-bottom: 10px;
+  margin-top: 0;
 }
 
-.cards p {
-  width: 300px;
+.home-cards p {
+  width: 100%; 
   color: #757575;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
 }

@@ -16,13 +16,11 @@ function Footer () {
             <Link to={"/login"}>Login</Link>
             <Link to={"/dashboard"}>Dashboard</Link>
             <Link to={"/conta"}>Conta</Link>
-            <Link to={"/monitoramento"}>Monitoramento</Link>
         </div>
 
         <div className="footer-item">
           <h3>Empresa</h3>
-            <Link to={"/home"}>Início</Link>
-            <Link to={"/tecnologia"}>Técnologias</Link>
+            <Link to={"/tecnologia"}>Tecnologias</Link>
             <Link to={"/sobrenos"}>Sobre nós</Link>
             <Link to={"/contato"}>Contato</Link>
             <Link to={"/perguntas"}>Perguntas Frequentes</Link>
@@ -31,7 +29,7 @@ function Footer () {
 
         <div className="footer-item">
           <h3>Contato</h3>
-          <p>contato@silotech.com.br</p>
+          <p>silotech.concordia@gmail.com</p>
           <p>+55 (49) 98891-8437</p>
           <p>Concórdia, Santa Catarina, Brasil</p>
         </div>

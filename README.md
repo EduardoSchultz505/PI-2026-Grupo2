@@ -56,7 +56,7 @@ imagem dos graficos
 ### 2. Configurando o Backend
 Navegue até a pasta do backend:
 ```bash
-cd ./backend
+cd .\backend\
 ```
 Instale as dependências:
 ```bash
