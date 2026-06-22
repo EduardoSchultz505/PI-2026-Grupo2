@@ -24,7 +24,6 @@ function Footer () {
             <Link to={"/sobrenos"}>Sobre nós</Link>
             <Link to={"/contato"}>Contato</Link>
             <Link to={"/perguntas"}>Perguntas Frequentes</Link>
-            <Link to={"/cadastro"}>Acesso Admin</Link>
         </div>
 
         <div className="footer-item">

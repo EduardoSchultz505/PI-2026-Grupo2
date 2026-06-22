@@ -2,6 +2,8 @@
   width: 100%;
   max-width: 1000px;
   margin: 20px auto;
+  padding: 0 15px;
+  box-sizing: border-box;
 }
 
 .chart-section {
@@ -13,6 +15,11 @@
   border: 1px solid #eee;
   position: relative;
   z-index: 1;
+  
+ 
+  width: 100%;
+  overflow: hidden; 
+  box-sizing: border-box;
 }
 
 .chart-title {
@@ -20,6 +27,7 @@
   padding-left: 10px;
   border-left: 4px solid #8884d8;
   color: #444;
+  font-size: 1.25rem;
 }
 
 .chart-title.temp {
@@ -36,6 +44,7 @@
   font-size: 2rem;
   font-weight: 600;
   color: #475569;
+  padding: 20px;
 }
 
 .header-dashboard {
@@ -43,6 +52,19 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  gap: 15px;
+}
+
+
+.selector-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.selector-container label {
+  font-weight: bold;
+  white-space: nowrap;
 }
 
 .selector-container select {
@@ -51,9 +73,74 @@
   border: 1px solid #ccc;
   font-size: 1rem;
   background-color: white;
+  max-width: 200px;
 }
 
-.selector-container label {
-  font-weight: bold;
-  margin-right: 10px;
+
+
+@media (max-width: 768px) {
+  .header-dashboard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .selector-container {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .selector-container select {
+    flex: 1;
+    max-width: none;
+  }
+
+  .chart-section {
+    padding: 15px;
+  }
+
+  .chart-title {
+    font-size: 1.1rem;
+  }
+
+  .loading-text {
+    font-size: 1.5rem;
+  }
+}
+
+
+
+.chart-wrapper {
+  width: 100%;
+  height: 300px;
+  position: relative;
+}
+
+
+.recharts-tooltip-wrapper {
+  z-index: 100;
+  pointer-events: none;
+}
+
+@media (max-width: 480px) {
+  .chart-wrapper {
+    height: 240px;
+  }
+  
+ 
+  .recharts-cartesian-axis-tick text {
+    font-size: 10px;
+  }
+}
+
+
+.recharts-wrapper:focus,
+.recharts-surface:focus,
+.chart-wrapper:focus {
+  outline: none !important;
+}
+
+
+.recharts-wrapper {
+  -webkit-tap-highlight-color: transparent;
 }

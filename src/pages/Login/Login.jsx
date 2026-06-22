@@ -6,11 +6,17 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     const loggedUser = localStorage.getItem("user_id");
+    const role = localStorage.getItem("role");
+
     if (loggedUser) {
-      navigate("/conta");
+      if (role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/conta");
+      }
     }
   }, [navigate]);
 
@@ -31,9 +37,16 @@ export default function Login() {
         localStorage.setItem("userName", data.username);
         localStorage.setItem("userEmail", email);
         localStorage.setItem("userToken", "logado");
+        localStorage.setItem("role", data.role);
 
         alert(`Bem vindo de volta ${data.username}!`);
-        navigate("/conta");
+        
+        if (data.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/conta");
+        }
+        
       } else {
         alert("E-mail ou senha incorretos");
       }

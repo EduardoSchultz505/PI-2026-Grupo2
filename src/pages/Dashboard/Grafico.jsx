@@ -37,28 +37,28 @@ function Grafico() {
   }, [usuarioId, sensorSelecionado]);
 
   const buscarDados = useCallback(async () => {
-  if (!usuarioId || !sensorSelecionado) return;
+    if (!usuarioId || !sensorSelecionado) return;
 
-  try {
-    const response = await axios.get(
-      `http://127.0.0.1:8000/sensor/meu-historico/${usuarioId}?sensor=${sensorSelecionado}`
-    );
-    const formatados = response.data.reverse().map((item) => ({
-      temperatura: item.temperatura,
-      umidade: item.umidade,
-      horaFormatada: new Date(item.horario.replace(" ", "T")).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    }));
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/sensor/meu-historico/${usuarioId}?sensor=${sensorSelecionado}`
+      );
+      const formatados = response.data.reverse().map((item) => ({
+        temperatura: item.temperatura,
+        umidade: item.umidade,
+        horaFormatada: new Date(item.horario.replace(" ", "T")).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      }));
 
-    setDados(formatados);
-  } catch (error) {
-    console.error("Erro ao carregar dados:", error);
-  } finally {
-    setLoading(false);
-  }
-}, [usuarioId, sensorSelecionado]);
+      setDados(formatados);
+    } catch (error) {
+      console.error("Erro ao carregar dados:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [usuarioId, sensorSelecionado]);
 
   useEffect(() => {
     buscarSensoresDisponiveis();
@@ -83,16 +83,16 @@ function Grafico() {
 
         <div className="selector-container">
           <label>Selecione o Sensor: </label>
-            <select
-              value={sensorSelecionado}
-              onChange={(e) => setSensorSelecionado(e.target.value)}
-            >
-              {listaSensores.map((nome) => (
-                <option key={nome} value={nome}>
-                  {nome.replace("_", " ")}
-                </option>
-              ))}
-            </select>
+          <select
+            value={sensorSelecionado}
+            onChange={(e) => setSensorSelecionado(e.target.value)}
+          >
+            {listaSensores.map((nome) => (
+              <option key={nome} value={nome}>
+                {nome.replace("_", " ")}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -108,13 +108,16 @@ function Grafico() {
             <h3 className="chart-title temp">
               Temperatura (°C) - {sensorSelecionado}
             </h3>
-            <div style={{ width: "100%", height: 300 }}>
-              <ResponsiveContainer>
-                <LineChart data={dados}>
+            <div className="chart-wrapper">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart 
+                  data={dados}
+                  margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="horaFormatada" />
-                  <YAxis domain={["auto", "auto"]} />
-                  <Tooltip />
+                  <XAxis dataKey="horaFormatada" minTickGap={15} tick={{ fontSize: 12 }} />
+                  <YAxis domain={["auto", "auto"]} tick={{ fontSize: 12 }} />
+                  <Tooltip trigger="click" touchDimension="x" />
                   <Legend />
                   <Line
                     type="monotone"
@@ -122,7 +125,8 @@ function Grafico() {
                     stroke="#ff4d4d"
                     strokeWidth={3}
                     name="Temp °C"
-                    dot={{ r: 4 }}
+                    dot={{ r: 5 }}
+                    activeDot={{ r: 8 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -131,13 +135,16 @@ function Grafico() {
 
           <div className="chart-section">
             <h3 className="chart-title">Umidade (%) - {sensorSelecionado}</h3>
-            <div style={{ width: "100%", height: 300 }}>
-              <ResponsiveContainer>
-                <LineChart data={dados}>
+            <div className="chart-wrapper">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart 
+                  data={dados}
+                  margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="horaFormatada" />
-                  <YAxis domain={["auto", "auto"]} />
-                  <Tooltip />
+                  <XAxis dataKey="horaFormatada" minTickGap={15} tick={{ fontSize: 12 }} />
+                  <YAxis domain={["auto", "auto"]} tick={{ fontSize: 12 }} />
+                  <Tooltip trigger="click" touchDimension="x" />
                   <Legend />
                   <Line
                     type="monotone"
@@ -145,7 +152,8 @@ function Grafico() {
                     stroke="#8884d8"
                     strokeWidth={3}
                     name="Umid %"
-                    dot={{ r: 4 }}
+                    dot={{ r: 5 }}
+                    activeDot={{ r: 8 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -155,6 +163,6 @@ function Grafico() {
       )}
     </div>
   );
-};
+}
 
 export default Grafico;

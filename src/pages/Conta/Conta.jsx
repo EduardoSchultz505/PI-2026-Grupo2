@@ -15,7 +15,7 @@ function Monitoramento() {
   const navigate = useNavigate();
   const usuarioId = localStorage.getItem("user_id");
   const [loading, setLoading] = useState(true);
-  const [resumo, setResumo] = useState({totalSensores: 0,});
+  const [resumo, setResumo] = useState({ totalSensores: 0 });
   const [alertas, setAlertas] = useState([]);
   const [sensores, setSensores] = useState([]);
   const [leituras, setLeituras] = useState({});
@@ -47,7 +47,7 @@ function Monitoramento() {
 
       setSensores(listaSensores);
 
-      setResumo({totalSensores: listaSensores.length,});
+      setResumo({ totalSensores: listaSensores.length });
 
       for (const sensor of listaSensores) {
         buscarHistorico(sensor);
@@ -103,188 +103,187 @@ function Monitoramento() {
 
   return (
     <div className="conta-page-wrapper">
-        <div className="content-container-center">
-          <header className="content-header">
-            <h2>Minha Conta</h2>
-            <p>Veja suas informações e sensores em tempo real</p>
-          </header>
+      <div className="content-container-center">
+        <header className="content-header">
+          <h2>Minha Conta</h2>
+          <p>Veja suas informações e sensores em tempo real</p>
+        </header>
 
-          <div className="stats-grid">
-            <div className="stat-card">
-              <div className="stat-icon">
-                <LuHardDrive size={24} />
-              </div>
-
-              <div>
-                <span className="stat-value">{resumo.totalSensores}</span>
-
-                <span className="stat-label">Sensores Ativos</span>
-              </div>
+        <div className="stats-grid">
+          <div className="stat-card">
+            <div className="stat-icon">
+              <LuHardDrive size={24} />
             </div>
 
-            <div className="stat-card">
-              <div className="stat-icon"><LuActivity size={24} /></div>
+            <div>
+              <span className="stat-value">{resumo.totalSensores}</span>
 
-              <div>
-                <span className="stat-value">{statusSistema}</span>
-                <span className="stat-label">Status do Sistema</span>
-              </div>
-            </div>
-
-            <div className="stat-card">
-              <div className="stat-icon"><LuBell size={24} /></div>
-              <div>
-                <span className="stat-value">{alertas.length}</span>
-                <span className="stat-label">Alertas Críticos</span>
-              </div>
-            </div>
-
-            <div className="stat-card">
-              <div className="stat-icon"><LuActivity size={24} /></div>
-
-              <div>
-                <span className="stat-value">
-                  {ultimaLeituraGlobal ? new Date(ultimaLeituraGlobal.horario).toLocaleTimeString() : "--:--"}
-                </span>
-
-                <span className="stat-label">Última Leitura</span>
-              </div>
+              <span className="stat-label">Sensores Ativos</span>
             </div>
           </div>
-          <section className="quick-actions">
-            <h3>Suas Atividades</h3>
-            <div className="action-list">
-              <div
-                className="action-item"
-                onClick={() => navigate("/dashboard")}
-              >
-                <div className="action-info">
-                  <h4>Análise de Gráficos</h4>
 
-                  <p>
-                    Verificar oscilações de temperatura e umidade em tempo real.
-                  </p>
-                </div>
-
-                <LuChevronRight />
-              </div>
+          <div className="stat-card">
+            <div className="stat-icon">
+              <LuActivity size={24} />
             </div>
 
-            <h3>Suas Notificações</h3>
-
-            <div className="action-list">
-              {alertas.length === 0 ? (
-                <div className="action-item">
-                  <div className="action-info">
-                    <h4>Nenhum alerta</h4>
-
-                    <p>Todos os sensores estão operando normalmente.</p>
-                  </div>
-                </div>
-              ) : (
-                alertas.map((alerta, index) => (
-                  <div className="action-item" key={index}>
-                    <div className="action-info">
-                      <h4>{alerta.sensor.replace("_", " ")}</h4>
-
-                      <p>{alerta.mensagem}</p>
-                    </div>
-                  </div>
-                ))
-              )}
+            <div>
+              <span className="stat-value">{statusSistema}</span>
+              <span className="stat-label">Status do Sistema</span>
             </div>
-            <h3>Sensores em Tempo Real</h3>
+          </div>
 
-            <div className="action-list">
-              {sensores.length === 0 ? (
-                <div className="action-item">
-                  <div className="action-info">
-                    <h4>Nenhum sensor encontrado</h4>
-
-                    <p>Você ainda não possui sensores cadastrados.</p>
-                  </div>
-                </div>
-              ) : (
-                sensores.map((sensor) => {
-                  const historico = leituras[sensor] || [];
-
-                  const ultima = historico[0];
-
-                  return (
-                    <div
-                      className="action-item"
-                      key={sensor}
-                      onClick={() => navigate("/dashboard")}
-                    >
-                      <div className="action-info">
-                        <h4>{sensor}</h4>
-
-                        {ultima ? (
-                          <>
-                            <p>
-                              Temperatura: {ultima.temperatura}
-                              °C
-                            </p>
-
-                            <p>Umidade: {ultima.umidade}%</p>
-
-                            <small>
-                              Última leitura:
-                              <br />
-                              {new Date(ultima.horario).toLocaleString()}
-                            </small>
-
-                            {historico.length > 1 && (
-                              <>
-                                <hr />
-
-                                <strong>Histórico recente</strong>
-
-                                <div className="historico">
-                                  {historico.slice(0, 5).map((item) => (
-                                    <div
-                                      className="historico-item"
-                                      key={item.id}
-                                    >
-                                      <span>
-                                        Temperatura{" "}
-                                        {item.temperatura}
-                                        °C
-                                      </span>
-
-                                      <span>
-                                        Umidade {item.umidade}%
-                                      </span>
-
-                                      <small>
-                                        {new Date(
-                                          item.horario,
-                                        ).toLocaleTimeString()}
-                                      </small>
-                                    </div>
-                                  ))}
-                                </div>
-                              </>
-                            )}
-                          </>
-                        ) : (
-                          <p>Sem leituras disponíveis.</p>
-                        )}
-                      </div>
-                      <LuChevronRight />
-                    </div>
-                  );
-                })
-              )}
+          <div className="stat-card">
+            <div className="stat-icon">
+              <LuBell size={24} />
             </div>
-          </section>
-          <div className="conta-footer">
-            <button className="sair" onClick={handleLogout}>
-              <LuLogOut />
-              <span>Sair</span>
-            </button>
+            <div>
+              <span className="stat-value">{alertas.length}</span>
+              <span className="stat-label">Alertas Críticos</span>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-icon">
+              <LuActivity size={24} />
+            </div>
+
+            <div>
+              <span className="stat-value">
+                {ultimaLeituraGlobal
+                  ? new Date(ultimaLeituraGlobal.horario).toLocaleTimeString()
+                  : "--:--"}
+              </span>
+
+              <span className="stat-label">Última Leitura</span>
+            </div>
           </div>
         </div>
+        <section className="quick-actions">
+          <h3>Suas Atividades</h3>
+          <div className="action-list">
+            <div className="action-item" onClick={() => navigate("/dashboard")}>
+              <div className="action-info">
+                <h4>Análise de Gráficos</h4>
+
+                <p>
+                  Verificar oscilações de temperatura e umidade em tempo real.
+                </p>
+              </div>
+
+              <LuChevronRight />
+            </div>
+          </div>
+
+          <h3>Suas Notificações</h3>
+
+          <div className="action-list">
+            {alertas.length === 0 ? (
+              <div className="action-item">
+                <div className="action-info">
+                  <h4>Nenhum alerta</h4>
+
+                  <p>Todos os sensores estão operando normalmente.</p>
+                </div>
+              </div>
+            ) : (
+              alertas.map((alerta, index) => (
+                <div className="action-item" key={index}>
+                  <div className="action-info">
+                    <h4>{alerta.sensor.replace("_", " ")}</h4>
+
+                    <p>{alerta.mensagem}</p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+          <h3>Sensores em Tempo Real</h3>
+
+          <div className="action-list">
+            {sensores.length === 0 ? (
+              <div className="action-item">
+                <div className="action-info">
+                  <h4>Nenhum sensor encontrado</h4>
+
+                  <p>Você ainda não possui sensores cadastrados.</p>
+                </div>
+              </div>
+            ) : (
+              sensores.map((sensor) => {
+                const historico = leituras[sensor] || [];
+
+                const ultima = historico[0];
+
+                return (
+                  <div
+                    className="action-item"
+                    key={sensor}
+                    onClick={() => navigate("/dashboard")}
+                  >
+                    <div className="action-info">
+                      <h4>{sensor}</h4>
+
+                      {ultima ? (
+                        <>
+                          <p>
+                            Temperatura: {ultima.temperatura}
+                            °C
+                          </p>
+
+                          <p>Umidade: {ultima.umidade}%</p>
+
+                          <small>
+                            Última leitura:
+                            <br />
+                            {new Date(ultima.horario).toLocaleString()}
+                          </small>
+
+                          {historico.length > 1 && (
+                            <>
+                              <hr />
+
+                              <strong>Histórico recente</strong>
+
+                              <div className="historico">
+                                {historico.slice(0, 5).map((item) => (
+                                  <div className="historico-item" key={item.id}>
+                                    <span>
+                                      Temperatura {item.temperatura}
+                                      °C
+                                    </span>
+
+                                    <span>Umidade {item.umidade}%</span>
+
+                                    <small>
+                                      {new Date(
+                                        item.horario,
+                                      ).toLocaleTimeString()}
+                                    </small>
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <p>Sem leituras disponíveis.</p>
+                      )}
+                    </div>
+                    <LuChevronRight />
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </section>
+        <div className="conta-footer">
+          <button className="sair" onClick={handleLogout}>
+            <LuLogOut />
+            <span>Sair</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

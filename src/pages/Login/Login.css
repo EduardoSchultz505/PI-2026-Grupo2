@@ -2,26 +2,33 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90vh;
+  min-height: 90vh;
   background-color: #f0f2f5;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .login {
-  padding: 40px;
   background-color: #ffffff;
   border-radius: 10px;
-  width: 400px;
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 400px;
   text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
 }
 
 .login h1 {
   color: #333;
   margin-bottom: 8px;
+  font-size: 28px;
 }
 
 .login p {
   color: #666;
   margin-bottom: 24px;
+  font-size: 15px;
 }
 
 .login-form {
@@ -31,27 +38,35 @@
 }
 
 .login-form div {
-  margin-bottom: 15px;
+  margin-bottom: 18px;
 }
 
 .login-form label {
   display: block;
   font-weight: 600;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   color: #444;
+  font-size: 14px;
 }
 
 .login-form input {
   width: 100%;
-  padding: 12px;
+  padding: 14px 12px;
   border: 1px solid #ddd;
   border-radius: 6px;
   box-sizing: border-box;
   font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+
+.login-form input:focus {
+  border-color: #0f9d58;
+  outline: none;
 }
 
 .botao-login {
-  padding: 12px;
+  padding: 14px;
   background-color: #0f9d58;
   color: white;
   border: none;
@@ -60,12 +75,38 @@
   font-size: 16px;
   font-weight: bold;
   margin-top: 10px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.botao-login:hover {
+  background-color: #0c854a;
+}
+
+.botao-login:active {
+  transform: scale(0.98);
 }
 
 .esqueceu-senha {
-  display: block;
+  display: inline-block;
   margin-top: 20px;
   font-size: 14px;
   color: #28a745;
   text-decoration: none;
+  transition: color 0.2s;
+}
+
+.esqueceu-senha:hover {
+  color: #1e7e34;
+  text-decoration: underline;
+}
+
+
+@media (max-width: 480px) {
+  .login {
+    padding: 30px 20px;
+  }
+  
+  .login h1 {
+    font-size: 24px;
+  }
 }
