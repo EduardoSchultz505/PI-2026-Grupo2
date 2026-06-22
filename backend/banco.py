@@ -6,8 +6,6 @@ from pydantic import BaseModel, Field
 from passlib.context import CryptContext
 from datetime import datetime
 
-ADMIN_SECRET_KEY = "$pbkdf2-sha256$29000$8/7f.58TIkTonZOydo4xhg$DAEhYqNr9TIRoABeC9jIW5T2T6jtTNGVvjH7WP8vak8"
-
 engine = create_engine("sqlite:///./silotech.db", connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -19,6 +17,7 @@ class User(Base):
     username = Column(String)
     email = Column(String, unique=True, index=True)
     password = Column(String)
+    role = Column(String, default="user")
     leituras = relationship("Leitura", back_populates="dono")
 
 class Leitura(Base):
@@ -38,7 +37,6 @@ class UserCreate(BaseModel):
     username: str = Field(..., min_length=3)
     email: str = Field(...)
     password: str = Field(..., min_length=8)
-    admin_key: str 
 
 class LoginRequest(BaseModel):
     email: str
@@ -75,16 +73,14 @@ def gerar_hash_senha(password: str):
 
 @app.post("/cadastro", status_code=status.HTTP_201_CREATED)
 def cadastro(request: UserCreate, db: Session = Depends(get_db)):
-    if not pwd_context.verify(request.admin_key, ADMIN_SECRET_KEY):
-        raise HTTPException(status_code=403, detail="Chave mestre inválida.")
-
     if db.query(User).filter(User.email == request.email).first():
         raise HTTPException(status_code=400, detail="E-mail já cadastrado.")
 
     novo_usuario = User(
         username=request.username,
         email=request.email,
-        password=gerar_hash_senha(request.password)
+        password=gerar_hash_senha(request.password),
+        role="user"
     )
     
     try:
@@ -106,10 +102,11 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         "status": "sucesso",
         "message": f"Bem-vindo, {user.username}!",
         "username": user.username,
-        "user_id": user.id 
+        "user_id": user.id,
+        "role": user.role
     }
 
-@app.post("/sensor/leitura") #gui10 usa esse para mandar as leituras para o db
+@app.post("/sensor/leitura") 
 def adicionar_leitura(request: LeituraCreate, db: Session = Depends(get_db)):
     if not db.query(User).filter(User.id == request.owner_id).first():
         raise HTTPException(status_code=404, detail="Usuário dono não encontrado.")
@@ -208,3 +205,23 @@ def gerar_alertas(usuario_id: int, db: Session = Depends(get_db)):
         "total_alertas": len(alertas),
         "alertas": alertas
     }
+
+@app.get("/admin/usuarios")
+def listar_usuarios(admin_id: int, db: Session = Depends(get_db)):
+
+    admin = db.query(User).filter(User.id == admin_id).first()
+
+    if not admin or admin.role != "admin":
+        raise HTTPException(403, "Acesso negado")
+
+    usuarios = db.query(User).all()
+
+    return [
+        {
+            "id": u.id,
+            "username": u.username,
+            "email": u.email,
+            "role": u.role
+        }
+        for u in usuarios
+    ]
