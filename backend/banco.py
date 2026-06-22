@@ -26,7 +26,7 @@ class Leitura(Base):
     sensor_nome = Column(String, index=True) 
     temperatura = Column(Float)
     umidade = Column(Float)
-    horario = Column(DateTime, default=datetime.utcnow)
+    horario = Column(DateTime, default=datetime.now)
     owner_id = Column(Integer, ForeignKey("users.id"))
     
     dono = relationship("User", back_populates="leituras")
@@ -77,7 +77,7 @@ def cadastro(request: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="E-mail já cadastrado.")
 
     novo_usuario = User(
-        username=request.username,
+        username=request.username.strip(),
         email=request.email,
         password=gerar_hash_senha(request.password),
         role="user"

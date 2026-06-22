@@ -4,8 +4,8 @@ url = "http://127.0.0.1:8000/sensor/leitura"
 
 dados = {
     "sensor_nome": "Sensor Milho",
-    "temperatura": 13,
-    "umidade": 11,
+    "temperatura": 18,
+    "umidade": 18,
     "owner_id": 2
 }
 

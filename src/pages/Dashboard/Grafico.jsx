@@ -43,6 +43,7 @@ function Grafico() {
       const response = await axios.get(
         `http://127.0.0.1:8000/sensor/meu-historico/${usuarioId}?sensor=${sensorSelecionado}`
       );
+      
       const formatados = response.data.reverse().map((item) => ({
         temperatura: item.temperatura,
         umidade: item.umidade,
@@ -108,7 +109,7 @@ function Grafico() {
             <h3 className="chart-title temp">
               Temperatura (°C) - {sensorSelecionado}
             </h3>
-            <div className="chart-wrapper">
+            <div className="chart-wrapper" >
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart 
                   data={dados}
