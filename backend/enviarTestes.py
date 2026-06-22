@@ -3,10 +3,10 @@ import requests
 url = "http://127.0.0.1:8000/sensor/leitura"
 
 dados = {
-    "sensor_nome": "Lindóia do Sul",
-    "temperatura": 13.0,
-    "umidade": 10.5,
-    "owner_id": 6
+    "sensor_nome": "Sensor Milho",
+    "temperatura": 13,
+    "umidade": 11,
+    "owner_id": 2
 }
 
 response = requests.post(url, json=dados)

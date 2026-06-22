@@ -1,79 +1,150 @@
 # SiloTech - Sistema de Monitoramento e Gestão
 
-O **SiloTech** é uma plataforma full-stack desenvolvida para o monitoramento inteligente de silos. O sistema permite o cadastro de usuários com validação administrativa, autenticação segura e a visualização de dados críticos coletados por sensores em tempo real.
+O **SiloTech** é uma plataforma desenvolvida para o monitoramento inteligente de silos agrícolas.  
+O sistema permite o cadastro de usuários com validação administrativa, autenticação segura e a visualização em tempo real de dados críticos coletados por sensores.
 
-### Participantes
-* Eduardo Schultz de Oliveira
-* Evelyn Maria Mafessoni Thomaz
-* Guilherme Otávio Riffel König
-* Isabela Vitória Fracaro
-* Kaiky Vieira
-* Luiz Eduardo Ramisch Teixeira
-* Samuel Henrique Ramisch Teixeira
+A solução combina **hardware + software + análise de dados**, ajudando no controle de temperatura e umidade dentro dos silos, reduzindo perdas e melhorando a eficiência no armazenamento de grãos.
 
-### Captura de Tela
+---
 
-imagem dos graficos
+## Participantes
+
+- Eduardo Schultz de Oliveira  
+- Evelyn Maria Mafessoni Thomaz  
+- Guilherme Otávio Riffel König  
+- Isabela Vitória Fracaro  
+- Kaiky Vieira  
+- Luiz Eduardo Ramisch Teixeira  
+- Samuel Henrique Ramisch Teixeira  
+
+---
+
+## Demonstração
+
+![Logo da SiloTech](src/assets/Print.png)
+
+- Dashboard principal  
+- Gráficos de sensores  
+- Tela de login  
+- Alertas em tempo real  
+
+---
 
 ## Tecnologias Utilizadas
 
 ### Frontend
-*   **React.js**: Biblioteca para construção da interface de usuário.
-*   **Vite**: Ferramenta de build rápida para o frontend.
-*   **React Router Dom**: Gerenciamento de rotas, navegação e tratamento de erro 404.
-*   **CSS3**: Estilização personalizada e responsiva.
+- React.js
+- Vite
+- React Router DOM
+- Axios
+- CSS3
 
 ### Backend
-*   **FastAPI**: Framework Python de alta performance para a criação da API.
-*   **SQLAlchemy**: ORM para comunicação com o banco de dados.
-*   **Passlib**: Biblioteca para criptografia e segurança de senhas.
-*   **Pydantic**: Validação de dados e esquemas.
-*   **Uvicorn**: Servidor ASGI para rodar a aplicação.
+- FastAPI
+- SQLAlchemy
+- Pydantic
+- Passlib
+- Uvicorn
 
 ### Banco de Dados
-*   **SQLite**: Banco de dados relacional leve, armazenado em arquivo local (`silotech.db`).
+- SQLite
 
-### Hardware
-*   **Arduino**: Recebe os pulsos digitais do sensor e os converte em variáveis de ponto flutuante (float) para temperatura e umidade.
-*   **DHT11**: Realiza a leitura de temperatura e umidade da massa de ar dentro do silo.
+### Hardware / IoT
+- Arduino
+- Sensor DHT11
+- Comunicação via HTTP com API
 
 ---
 
-## Estrutura do Projeto
+## Arquitetura do Sistema
 
-*   **Páginas Públicas**: Home, Sobre o Projeto (Impacto Agronômico), Tecnologias, Contato, Login e Cadastro.
-*   **Páginas Privadas**: Dashboard de Monitoramento, Histórico de Dados e Configurações do Silo.
-*   **Segurança**: O cadastro de novos usuários exige uma **Chave de Mestre** para garantir que apenas pessoas autorizadas pelo instalador acessem o sistema.
+- **Frontend (React)** → interface e dashboard
+- **Backend (FastAPI)** → API e regras de negócio
+- **IoT (Arduino)** → coleta de temperatura e umidade
+
+---
+
+## Segurança
+
+- Senhas criptografadas com Passlib  
+- Controle de acesso por papel de usuário (admin/user)  
+- Proteção de rotas no frontend  
+
+---
+
+## Funcionalidades
+
+### Usuário comum
+- Login
+- Visualização de sensores
+- Histórico de leituras
+- Alertas em tempo real
+
+### Administrador
+- Cadastro de usuários
+- Visualização de usuários
+- Monitoramento completo do sistema
 
 ---
 
 ## Como rodar o projeto
 
-### 1. Pré-requisitos
-*   Node.js instalado.
-*   Python 3.10 ou superior instalado.
+### Pré-requisitos
+- Node.js
+- Python 3.10+
 
-### 2. Configurando o Backend
-Navegue até a pasta do backend:
+---
+
+### Frontend
 ```bash
-cd .\backend\
+npm install
+npm run dev
 ```
-Instale as dependências:
+### Aplicação disponível em:
+
+http://localhost:5173
+
+### Backend
+
 ```bash
-pip install fastapi uvicorn sqlalchemy passlib[bcrypt] pydantic requests
-```
-Após instalar as dependências, inicie o servidor com o comando:
-```bash
+cd backend
+pip install fastapi uvicorn sqlalchemy passlib[bcrypt] pydantic
 python -m uvicorn banco:app --reload
 ```
 
-### 3. Configurando o Frontend
-Abra um novo terminal na pasta raiz e instale as dependências do Node:
-```bash
-npm install
-```
-Inicie o servidor de desenvolvimento do Vite:
-```bash
-npm run dev
-```
-O terminal informará um endereço (http://localhost:5173). Abra este link no navegador.
+### Acesso da API
+
+http://127.0.0.1:8000
+
+---
+
+## Endpoints principais
+
+### Usuários
+- POST /cadastro → cria usuário
+- POST /login → autenticação
+
+### Sensores
+- POST /sensor/leitura → envia leitura do sensor
+- GET /sensor/meu-historico/{usuario_id} → histórico de leituras
+- GET /sensor/lista-sensores/{usuario_id} → lista sensores do usuário
+- GET /sensor/alertas/{usuario_id} → alertas do sistema
+
+---
+
+## Regras do sistema
+
+- Cada usuário pode ter múltiplos sensores
+- O sistema mantém apenas as **últimas 12 leituras por sensor**
+- Alertas são gerados automaticamente:
+  - Temperatura > 20°C ou < 10°C
+  - Umidade > 14% ou < 12%
+
+
+## Melhorias futuras
+
+- Autenticação JWT
+- WebSockets para dados em tempo real
+- Deploy em nuvem (Render / Railway)
+- Dashboard administrativo avançado
+- Logs e histórico completo de sensores
