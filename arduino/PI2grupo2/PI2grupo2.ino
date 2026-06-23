@@ -11,7 +11,7 @@ void setup() {
 }
 
 void loop() {
-  delay(60000); // 1 leitura por minuto
+  delay(60000);
 
   float umidade = dht.readHumidity();
   float temperatura = dht.readTemperature();

@@ -17,14 +17,16 @@ function Grafico() {
   const [loading, setLoading] = useState(false);
   const [listaSensores, setListaSensores] = useState([]);
   const [sensorSelecionado, setSensorSelecionado] = useState("");
+  const [erro, setErro] = useState("");
 
   const usuarioId = localStorage.getItem("user_id");
 
   const buscarSensoresDisponiveis = useCallback(async () => {
     if (!usuarioId) return;
     try {
+      setErro("");
       const response = await axios.get(
-        `http://127.0.0.1:8000/sensor/lista-sensores/${usuarioId}`,
+        `http://127.0.0.1:8000/sensor/lista-sensores/${usuarioId}`
       );
       setListaSensores(response.data);
 
@@ -33,15 +35,21 @@ function Grafico() {
       }
     } catch (error) {
       console.error("Erro ao buscar lista de sensores:", error);
+      setErro("Erro ao carregar sensores. Verifique se a API está rodando.");
     }
   }, [usuarioId, sensorSelecionado]);
 
   const buscarDados = useCallback(async () => {
     if (!usuarioId || !sensorSelecionado) return;
 
+    setLoading(true);
     try {
+      setErro("");
       const response = await axios.get(
-        `http://127.0.0.1:8000/sensor/meu-historico/${usuarioId}?sensor=${sensorSelecionado}`
+        `http://127.0.0.1:8000/sensor/meu-historico/${usuarioId}`,
+        {
+          params: { sensor: sensorSelecionado }
+        }
       );
       
       const formatados = response.data.reverse().map((item) => ({
@@ -56,6 +64,8 @@ function Grafico() {
       setDados(formatados);
     } catch (error) {
       console.error("Erro ao carregar dados:", error);
+      setErro("Erro ao carregar dados do sensor. Tente novamente.");
+      setDados([]);
     } finally {
       setLoading(false);
     }
@@ -67,9 +77,8 @@ function Grafico() {
 
   useEffect(() => {
     if (sensorSelecionado) {
-      setLoading(true);
       buscarDados();
-      const interval = setInterval(buscarDados, 10000);
+      const interval = setInterval(buscarDados, 10000); // Atualiza a cada 10 segundos
       return () => clearInterval(interval);
     }
   }, [buscarDados, sensorSelecionado]);
@@ -88,6 +97,7 @@ function Grafico() {
             value={sensorSelecionado}
             onChange={(e) => setSensorSelecionado(e.target.value)}
           >
+            <option value="">-- Selecione um sensor --</option>
             {listaSensores.map((nome) => (
               <option key={nome} value={nome}>
                 {nome.replace("_", " ")}
@@ -97,9 +107,23 @@ function Grafico() {
         </div>
       </div>
 
+      {erro && (
+        <div style={{ 
+          padding: "15px", 
+          backgroundColor: "#fee", 
+          color: "#c33", 
+          borderRadius: "5px",
+          marginBottom: "15px"
+        }}>
+          ⚠️ {erro}
+        </div>
+      )}
+
       {listaSensores.length === 0 ? (
         <p className="loading-text">Aguardando dados de algum sensor...</p>
-      ) : loading ? (
+      ) : !sensorSelecionado ? (
+        <p className="loading-text">Selecione um sensor para visualizar dados...</p>
+      ) : loading && dados.length === 0 ? (
         <p className="loading-text">
           Buscando dados do sensor {sensorSelecionado}...
         </p>
@@ -109,7 +133,7 @@ function Grafico() {
             <h3 className="chart-title temp">
               Temperatura (°C) - {sensorSelecionado}
             </h3>
-            <div className="chart-wrapper" >
+            <div className="chart-wrapper">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart 
                   data={dados}
@@ -160,6 +184,10 @@ function Grafico() {
               </ResponsiveContainer>
             </div>
           </div>
+
+          {dados.length === 0 && (
+            <p className="loading-text">Nenhum dado disponível para este sensor.</p>
+          )}
         </div>
       )}
     </div>
