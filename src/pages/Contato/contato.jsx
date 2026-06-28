@@ -47,6 +47,8 @@ export default function Contato() {
         console.log(error);
         alert("Erro ao enviar mensagem.");
       });
+
+
   }
 
   return (
@@ -97,7 +99,7 @@ export default function Contato() {
           <form onSubmit={handleSubmit}>
             <div className="input">
               <label>Nome completo</label>
-              <input type="text" name="nome" onChange={handleChange} required />
+              <input type="text" name="nome" onChange={handleChange} value={form.nome} required />
             </div>
 
             <div className="input">
@@ -106,6 +108,7 @@ export default function Contato() {
                 type="email"
                 name="email"
                 onChange={handleChange}
+                value={form.email}
                 required
               />
             </div>
@@ -116,13 +119,15 @@ export default function Contato() {
                 type="text"
                 name="telefone"
                 onChange={handleChange}
+                value={form.telefone}
                 required
+                value={form.telefone}
               />
             </div>
 
             <div className="input">
               <label>Motivo</label>
-              <select name="motivo" onChange={handleChange} required>
+              <select name="motivo" onChange={handleChange} value={form.motivo} required>
                 <option value="">Selecione uma opção</option>
                 <option value="suporte">Suporte</option>
                 <option value="consulta">Consulta</option>
@@ -138,6 +143,7 @@ export default function Contato() {
                 rows="5"
                 onChange={handleChange}
                 required
+                value={form.mensagem}
               />
             </div>
 
