@@ -5,7 +5,7 @@
 3. Ajuste SERIAL_PORT, OWNER_ID e SENSOR_NOME
 """
 
-=======
+
 >>>>>>> b44db15a80529ce9d116ef05beecd78587b962dd
 import json
 import sys
@@ -23,8 +23,6 @@ OWNER_ID = 6
 
 
 =======
-# Windows geralmente usa COM3, COM4 etc.
-# Linux pode usar /dev/ttyACM0 ou /dev/ttyUSB0.
 SERIAL_PORT = "COM3"
 BAUD_RATE = 9600
 API_URL = "http://127.0.0.1:8000"
