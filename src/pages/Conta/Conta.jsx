@@ -74,7 +74,7 @@ function Monitoramento() {
 
     const interval = setInterval(() => {
       carregarDados();
-    }, 5000);
+    }, 30000);
 
     return () => {
       clearTimeout(timeout);
@@ -187,8 +187,8 @@ function Monitoramento() {
                 </div>
               </div>
             ) : (
-              alertas.map((alerta, index) => (
-                <div className="action-item" key={index}>
+              alertas.map((alerta) => (
+                <div className="action-item" key={`${alerta.sensor}-${alerta.tipo}`}>
                   <div className="action-info">
                     <h4>{alerta.sensor.replace("_", " ")}</h4>
 

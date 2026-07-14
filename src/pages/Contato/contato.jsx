@@ -5,6 +5,7 @@ import "./Contato.css";
 import emailjs from "@emailjs/browser";
 
 export default function Contato() {
+  const [enviando, setEnviando] = useState(false);
   const [form, setForm] = useState({
     nome: "",
     email: "",
@@ -19,6 +20,9 @@ export default function Contato() {
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    setEnviando(true);
+
     emailjs
       .send(
         "service_i5rftbl",
@@ -46,9 +50,10 @@ export default function Contato() {
       .catch((error) => {
         console.log(error);
         alert("Erro ao enviar mensagem.");
+      })
+      .finally(() => {
+        setEnviando(false);
       });
-
-
   }
 
   return (
@@ -91,7 +96,9 @@ export default function Contato() {
               <p>Concórdia - SC</p>
             </div>
           </div>
-              <Link to="/perguntas" className="veja-perguntas">Veja Perguntas Frequentes</Link>
+          <Link to="/perguntas" className="veja-perguntas">
+            Veja Perguntas Frequentes
+          </Link>
         </div>
         <div className="formulario">
           <h2>Envie uma mensagem</h2>
@@ -99,7 +106,14 @@ export default function Contato() {
           <form onSubmit={handleSubmit}>
             <div className="input">
               <label>Nome completo</label>
-              <input type="text" name="nome" onChange={handleChange} value={form.nome} required />
+              <input
+                type="text"
+                name="nome"
+                onChange={handleChange}
+                value={form.nome}
+                required
+                placeholder="Digite seu nome"
+              />
             </div>
 
             <div className="input">
@@ -110,6 +124,7 @@ export default function Contato() {
                 onChange={handleChange}
                 value={form.email}
                 required
+                placeholder="Digite seu e-mail"
               />
             </div>
 
@@ -121,13 +136,18 @@ export default function Contato() {
                 onChange={handleChange}
                 value={form.telefone}
                 required
-                value={form.telefone}
+                placeholder="Digite seu telefone"
               />
             </div>
 
             <div className="input">
               <label>Motivo</label>
-              <select name="motivo" onChange={handleChange} value={form.motivo} required>
+              <select
+                name="motivo"
+                onChange={handleChange}
+                value={form.motivo}
+                required
+              >
                 <option value="">Selecione uma opção</option>
                 <option value="suporte">Suporte</option>
                 <option value="consulta">Consulta</option>
@@ -144,10 +164,13 @@ export default function Contato() {
                 onChange={handleChange}
                 required
                 value={form.mensagem}
+                placeholder="Digite sua mensagem"
               />
             </div>
 
-            <button type="submit">Enviar mensagem</button>
+            <button type="submit" disabled={enviando}>
+              {enviando ? "Enviando..." : "Enviar mensagem"}
+            </button>
           </form>
         </div>
       </section>

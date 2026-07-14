@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Admin.css";
 import { LuLogOut } from "react-icons/lu";
+import "./Admin.css";
 
 export default function Admin() {
   const navigate = useNavigate();
+
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [abaAtiva, setAbaAtiva] = useState("tabela");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [role, setRole] = useState("user");
 
   useEffect(() => {
-    const role = localStorage.getItem("role");
+    const roleStorage = localStorage.getItem("role");
 
-    if (role !== "admin") {
+    if (roleStorage !== "admin") {
       alert("Acesso negado.");
       navigate("/conta");
       return;
@@ -32,10 +35,13 @@ export default function Admin() {
   const carregarUsuarios = async () => {
     try {
       setLoading(true);
+
       const adminId = localStorage.getItem("user_id");
+
       const response = await fetch(
-        `http://127.0.0.1:8000/admin/usuarios?admin_id=${adminId}`,
+        `http://127.0.0.1:8000/admin/usuarios?admin_id=${adminId}`
       );
+
       const data = await response.json();
 
       if (response.ok) {
@@ -55,17 +61,23 @@ export default function Admin() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/cadastro", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          email,
-          password,
-        }),
-      });
+      const adminId = localStorage.getItem("user_id");
+
+      const response = await fetch(
+        `http://127.0.0.1:8000/cadastro?admin_id=${adminId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            email,
+            password,
+            role,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -76,17 +88,19 @@ export default function Admin() {
 
       alert("Conta criada com sucesso!");
 
+      setUsername("");
       setEmail("");
       setPassword("");
-      setUsername("");
+      setRole("user");
+
       setAbaAtiva("tabela");
+
       carregarUsuarios();
     } catch (error) {
-      console.error("Erro na conexão:", error);
-      alert("Não foi possível conectar ao servidor");
+      console.error(error);
+      alert("Não foi possível conectar ao servidor.");
     }
   };
-
   return (
     <div className="admin-container">
       <div className="admin-header">
@@ -158,7 +172,7 @@ export default function Admin() {
                 <label>E-mail</label>
                 <input
                   type="email"
-                  placeholder="Digite seu e-mail"
+                  placeholder="Digite o e-mail do usuário"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -169,7 +183,7 @@ export default function Admin() {
                 <label>Nome de Usuário</label>
                 <input
                   type="text"
-                  placeholder="Digite seu nome"
+                  placeholder="Digite o nome do usuário"
                   value={username}
                   minLength={3}
                   maxLength={20}
@@ -182,12 +196,20 @@ export default function Admin() {
                 <label>Senha</label>
                 <input
                   type="password"
-                  placeholder="Crie sua senha"
+                  placeholder="Crie a senha do usuário"
                   value={password}
                   minLength={8}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
+              </div>
+
+              <div>
+                <label>Tipo de Conta</label>
+                <select value={role} onChange={(e) => setRole(e.target.value)}>
+                  <option value="user">Usuário</option>
+                  <option value="admin">Administrador</option>
+                </select>
               </div>
 
               <button type="submit" className="botao-login">

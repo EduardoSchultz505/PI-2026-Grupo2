@@ -217,6 +217,28 @@
   padding: 40px 0;
 }
 
+.admin-container .login-form select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: #334155;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.admin-container .login-form select:focus {
+  border-color: #179c6c;
+  outline: none;
+}
+
+.admin-container .login-form select:hover {
+  border-color: #94a3b8;
+}
+
 
 @media (max-width: 680px) {
   .admin-container {
@@ -238,4 +260,11 @@
     width: 100%;
     justify-content: center;
   }
+
+  .admin-container .login-form input,
+  .admin-container .login-form select {
+    font-size: 14px;
+    padding: 11px;
+  }
+
 }

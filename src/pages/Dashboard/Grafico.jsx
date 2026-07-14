@@ -78,7 +78,7 @@ function Grafico() {
   useEffect(() => {
     if (sensorSelecionado) {
       buscarDados();
-      const interval = setInterval(buscarDados, 10000); // Atualiza a cada 10 segundos
+      const interval = setInterval(buscarDados, 30000);
       return () => clearInterval(interval);
     }
   }, [buscarDados, sensorSelecionado]);
@@ -97,7 +97,7 @@ function Grafico() {
             value={sensorSelecionado}
             onChange={(e) => setSensorSelecionado(e.target.value)}
           >
-            <option value="">-- Selecione um sensor --</option>
+            <option value="">Selecione um sensor</option>
             {listaSensores.map((nome) => (
               <option key={nome} value={nome}>
                 {nome.replace("_", " ")}
@@ -115,7 +115,7 @@ function Grafico() {
           borderRadius: "5px",
           marginBottom: "15px"
         }}>
-          ⚠️ {erro}
+          {erro}
         </div>
       )}
 

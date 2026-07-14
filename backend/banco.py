@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker, Session, declarative_base, relationship
 from pydantic import BaseModel, Field
 from passlib.context import CryptContext
 from datetime import datetime
+from typing import Literal
 
 engine = create_engine("sqlite:///./silotech.db", connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -19,22 +20,11 @@ class User(Base):
     password = Column(String)
     role = Column(String, default="user")
     leituras = relationship("Leitura", back_populates="dono")
-    silos = relationship("Silo", back_populates="dono")
-
-class Silo(Base):
-    __tablename__ = "silos"
-    id = Column(Integer, primary_key=True, index=True)
-    nome = Column(String, index=True)
-    descricao = Column(String, default="")
-    criado_em = Column(DateTime, default=datetime.now)
-    owner_id = Column(Integer, ForeignKey("users.id"))
-
-    dono = relationship("User", back_populates="silos")
 
 class Leitura(Base):
     __tablename__ = "leituras"
     id = Column(Integer, primary_key=True, index=True)
-    sensor_nome = Column(String, index=True) 
+    sensor_nome = Column(String, index=True)
     temperatura = Column(Float)
     umidade = Column(Float)
     horario = Column(DateTime, default=datetime.now)
@@ -44,19 +34,17 @@ class Leitura(Base):
 
 Base.metadata.create_all(bind=engine)
 
+
+
 class UserCreate(BaseModel):
     username: str = Field(..., min_length=3)
     email: str = Field(...)
     password: str = Field(..., min_length=8)
+    role: Literal["user", "admin"] = "user"
 
 class LoginRequest(BaseModel):
     email: str
     password: str
-
-class SiloCreate(BaseModel):
-    nome: str = Field(..., min_length=2)
-    owner_id: int
-    descricao: str = ""
 
 class LeituraCreate(BaseModel):
     sensor_nome: str
@@ -93,43 +81,38 @@ def obter_usuario_ou_404(db: Session, owner_id: int):
         raise HTTPException(status_code=404, detail="Usuário dono não encontrado.")
     return usuario
 
-def garantir_silo(db: Session, owner_id: int, nome: str):
-    silo = db.query(Silo).filter(
-        Silo.owner_id == owner_id,
-        Silo.nome == nome
-    ).first()
-
-    if silo:
-        return silo
-
-    novo_silo = Silo(nome=nome, owner_id=owner_id)
-    db.add(novo_silo)
-    db.flush()
-    return novo_silo
-
 @app.get("/")
 def raiz():
     return {"status": "online", "api": "SiloTech"}
 
 @app.post("/cadastro", status_code=status.HTTP_201_CREATED)
-def cadastro(request: UserCreate, db: Session = Depends(get_db)):
+def cadastro(
+    request: UserCreate,
+    admin_id: int,
+    db: Session = Depends(get_db)
+):
+    admin = db.query(User).filter(User.id == admin_id).first()
+
+    if not admin:
+        raise HTTPException(404, "Administrador não encontrado.")
+
+    if admin.role != "admin":
+        raise HTTPException(403, "Apenas administradores podem cadastrar usuários.")
+
     if db.query(User).filter(User.email == request.email).first():
-        raise HTTPException(status_code=400, detail="E-mail já cadastrado.")
+        raise HTTPException(400, "E-mail já cadastrado.")
 
     novo_usuario = User(
         username=request.username.strip(),
         email=request.email,
         password=gerar_hash_senha(request.password),
-        role="user"
+        role=request.role
     )
-    
-    try:
-        db.add(novo_usuario)
-        db.commit()
-        return {"status": "sucesso", "message": "Conta criada com sucesso!"}
-    except Exception:
-        db.rollback()
-        raise HTTPException(status_code=500, detail="Erro ao criar usuário.")
+
+    db.add(novo_usuario)
+    db.commit()
+
+    return {"status": "sucesso"}
 
 @app.post("/login")
 def login(request: LoginRequest, db: Session = Depends(get_db)):
@@ -146,62 +129,13 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         "role": user.role
     }
 
-@app.post("/silos", status_code=status.HTTP_201_CREATED)
-def cadastrar_silo(request: SiloCreate, db: Session = Depends(get_db)):
-    obter_usuario_ou_404(db, request.owner_id)
-
-    nome = request.nome.strip()
-    if not nome:
-        raise HTTPException(status_code=400, detail="Nome do silo não pode ficar vazio.")
-
-    if db.query(Silo).filter(Silo.owner_id == request.owner_id, Silo.nome == nome).first():
-        raise HTTPException(status_code=400, detail="Este silo já está cadastrado para o usuário.")
-
-    novo_silo = Silo(nome=nome, descricao=request.descricao.strip(), owner_id=request.owner_id)
-
-    try:
-        db.add(novo_silo)
-        db.commit()
-        db.refresh(novo_silo)
-        return {
-            "status": "sucesso",
-            "message": "Silo cadastrado com sucesso!",
-            "silo": {
-                "id": novo_silo.id,
-                "nome": novo_silo.nome,
-                "descricao": novo_silo.descricao,
-                "owner_id": novo_silo.owner_id,
-                "criado_em": novo_silo.criado_em,
-            }
-        }
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/silos/{usuario_id}")
-def listar_silos(usuario_id: int, db: Session = Depends(get_db)):
-    obter_usuario_ou_404(db, usuario_id)
-
-    silos = db.query(Silo).filter(Silo.owner_id == usuario_id).order_by(Silo.nome).all()
-
-    return [
-        {
-            "id": silo.id,
-            "nome": silo.nome,
-            "descricao": silo.descricao,
-            "owner_id": silo.owner_id,
-            "criado_em": silo.criado_em,
-        }
-        for silo in silos
-    ]
-
-@app.post("/sensor/leitura") 
+@app.post("/sensor/leitura")
 def adicionar_leitura(request: LeituraCreate, db: Session = Depends(get_db)):
     obter_usuario_ou_404(db, request.owner_id)
 
     sensor_nome = request.sensor_nome.strip()
     if not sensor_nome:
-        raise HTTPException(status_code=400, detail="Nome do sensor/silo não pode ficar vazio.")
+        raise HTTPException(status_code=400, detail="Nome do sensor não pode ficar vazio.")
 
     nova_leitura = Leitura(
         sensor_nome=sensor_nome,
@@ -211,7 +145,6 @@ def adicionar_leitura(request: LeituraCreate, db: Session = Depends(get_db)):
     )
     
     try:
-        garantir_silo(db, request.owner_id, sensor_nome)
         db.add(nova_leitura)
         db.commit()
 
@@ -243,17 +176,13 @@ def obter_historico_pessoal(usuario_id: int, sensor: str, db: Session = Depends(
 def listar_sensores_usuario(usuario_id: int, db: Session = Depends(get_db)):
     obter_usuario_ou_404(db, usuario_id)
 
-    nomes_silos = {
-        silo.nome for silo in db.query(Silo).filter(Silo.owner_id == usuario_id).all()
-    }
-
-    nomes_leituras = {
+    nomes_leituras = [
         sensor[0] for sensor in db.query(Leitura.sensor_nome).filter(
             Leitura.owner_id == usuario_id
         ).distinct().all()
-    }
+    ]
 
-    return sorted(nomes_silos.union(nomes_leituras))
+    return sorted(nomes_leituras)
 
 @app.get("/sensor/alertas/{usuario_id}")
 def gerar_alertas(usuario_id: int, db: Session = Depends(get_db)):
@@ -309,7 +238,6 @@ def gerar_alertas(usuario_id: int, db: Session = Depends(get_db)):
 
 @app.get("/admin/usuarios")
 def listar_usuarios(admin_id: int, db: Session = Depends(get_db)):
-
     admin = db.query(User).filter(User.id == admin_id).first()
 
     if not admin or admin.role != "admin":
