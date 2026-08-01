@@ -81,11 +81,11 @@ def obter_usuario_ou_404(db: Session, owner_id: int):
         raise HTTPException(status_code=404, detail="Usuário dono não encontrado.")
     return usuario
 
-@app.get("/")
+@app.get("/api")
 def raiz():
     return {"status": "online", "api": "SiloTech"}
 
-@app.post("/cadastro", status_code=status.HTTP_201_CREATED)
+@app.post("/api/cadastro", status_code=status.HTTP_201_CREATED)
 def cadastro(
     request: UserCreate,
     admin_id: int,
@@ -114,7 +114,7 @@ def cadastro(
 
     return {"status": "sucesso"}
 
-@app.post("/login")
+@app.post("/api/login")
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == request.email).first()
 
@@ -129,7 +129,7 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         "role": user.role
     }
 
-@app.post("/sensor/leitura")
+@app.post("/api/sensor/leitura")
 def adicionar_leitura(request: LeituraCreate, db: Session = Depends(get_db)):
     obter_usuario_ou_404(db, request.owner_id)
 
@@ -163,7 +163,7 @@ def adicionar_leitura(request: LeituraCreate, db: Session = Depends(get_db)):
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/sensor/meu-historico/{usuario_id}")
+@app.get("/api/sensor/meu-historico/{usuario_id}")
 def obter_historico_pessoal(usuario_id: int, sensor: str, db: Session = Depends(get_db)):
     dados = db.query(Leitura).filter(
         Leitura.owner_id == usuario_id,
@@ -172,7 +172,7 @@ def obter_historico_pessoal(usuario_id: int, sensor: str, db: Session = Depends(
     
     return dados
 
-@app.get("/sensor/lista-sensores/{usuario_id}")
+@app.get("/api/sensor/lista-sensores/{usuario_id}")
 def listar_sensores_usuario(usuario_id: int, db: Session = Depends(get_db)):
     obter_usuario_ou_404(db, usuario_id)
 
@@ -184,7 +184,7 @@ def listar_sensores_usuario(usuario_id: int, db: Session = Depends(get_db)):
 
     return sorted(nomes_leituras)
 
-@app.get("/sensor/alertas/{usuario_id}")
+@app.get("/api/sensor/alertas/{usuario_id}")
 def gerar_alertas(usuario_id: int, db: Session = Depends(get_db)):
     alertas = []
 
@@ -236,7 +236,7 @@ def gerar_alertas(usuario_id: int, db: Session = Depends(get_db)):
         "alertas": alertas
     }
 
-@app.get("/admin/usuarios")
+@app.get("/api/admin/usuarios")
 def listar_usuarios(admin_id: int, db: Session = Depends(get_db)):
     admin = db.query(User).filter(User.id == admin_id).first()
 
