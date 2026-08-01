@@ -39,7 +39,7 @@ export default function Admin() {
       const adminId = localStorage.getItem("user_id");
 
       const response = await fetch(
-        `http://127.0.0.1:8000/admin/usuarios?admin_id=${adminId}`
+        `/api/admin/usuarios?admin_id=${adminId}`
       );
 
       const data = await response.json();
@@ -64,7 +64,7 @@ export default function Admin() {
       const adminId = localStorage.getItem("user_id");
 
       const response = await fetch(
-        `http://127.0.0.1:8000/cadastro?admin_id=${adminId}`,
+        `/api/cadastro?admin_id=${adminId}`,
         {
           method: "POST",
           headers: {
