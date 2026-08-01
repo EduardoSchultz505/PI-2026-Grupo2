@@ -1,17 +1,38 @@
-from fastapi import FastAPI, HTTPException, Depends, status
-from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, create_engine, desc
-from sqlalchemy.orm import sessionmaker, Session, declarative_base, relationship
-from pydantic import BaseModel, Field
-from passlib.context import CryptContext
+import os
 from datetime import datetime
 from typing import Literal
 
-engine = create_engine("sqlite:///./silotech.db", connect_args={"check_same_thread": False})
+from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+from passlib.context import CryptContext
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, create_engine, desc
+from sqlalchemy.orm import sessionmaker, Session, declarative_base, relationship
+
+# -----------------------------------------------------------------------------
+# CONFIGURAÇÃO DO BANCO DE DADOS (Turso na Vercel / SQLite Local para testes)
+# -----------------------------------------------------------------------------
+TURSO_URL = os.environ.get("TURSO_DATABASE_URL")
+TURSO_TOKEN = os.environ.get("TURSO_AUTH_TOKEN")
+
+if TURSO_URL and TURSO_TOKEN:
+    # Formata a URL para o protocolo libsql exigido pelo SQLAlchemy + Turso
+    db_url = TURSO_URL.replace("libsql://", "sqlite+libsql://")
+    engine = create_engine(
+        f"{db_url}?authToken={TURSO_TOKEN}",
+        connect_args={"check_same_thread": False}
+    )
+else:
+    # Fallback para o SQLite local caso rode fora da Vercel
+    engine = create_engine("sqlite:///./silotech.db", connect_args={"check_same_thread": False})
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
+# -----------------------------------------------------------------------------
+# MODELOS DO BANCO DE DADOS (SQLAlchemy)
+# -----------------------------------------------------------------------------
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
@@ -32,10 +53,12 @@ class Leitura(Base):
     
     dono = relationship("User", back_populates="leituras")
 
+# Cria as tabelas se não existirem
 Base.metadata.create_all(bind=engine)
 
-
-
+# -----------------------------------------------------------------------------
+# SCHEMAS (Pydantic)
+# -----------------------------------------------------------------------------
 class UserCreate(BaseModel):
     username: str = Field(..., min_length=3)
     email: str = Field(...)
@@ -52,6 +75,9 @@ class LeituraCreate(BaseModel):
     umidade: float
     owner_id: int
 
+# -----------------------------------------------------------------------------
+# INICIALIZAÇÃO DO FASTAPI
+# -----------------------------------------------------------------------------
 app = FastAPI(title="SiloTech API")
 
 app.add_middleware(
@@ -62,6 +88,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# -----------------------------------------------------------------------------
+# FUNÇÕES AUXILIARES E DEPENDÊNCIAS
+# -----------------------------------------------------------------------------
 def get_db():
     db = SessionLocal()
     try:
@@ -81,6 +110,9 @@ def obter_usuario_ou_404(db: Session, owner_id: int):
         raise HTTPException(status_code=404, detail="Usuário dono não encontrado.")
     return usuario
 
+# -----------------------------------------------------------------------------
+# ROTAS / ENDPOINTS
+# -----------------------------------------------------------------------------
 @app.get("/api")
 def raiz():
     return {"status": "online", "api": "SiloTech"}

@@ -5,3 +5,5 @@ passlib[bcrypt]
 pydantic
 requests
 pyserial
+sqla-libsql
+libsql-experimental
