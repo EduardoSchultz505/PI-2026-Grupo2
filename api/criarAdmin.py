@@ -1,4 +1,4 @@
-from api.banco import SessionLocal, User, gerar_hash_senha
+from api.index import SessionLocal, User, gerar_hash_senha
 
 db = SessionLocal()
 

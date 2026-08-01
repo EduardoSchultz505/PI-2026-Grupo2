@@ -109,9 +109,8 @@ def obter_usuario_ou_404(db: Session, owner_id: int):
         raise HTTPException(status_code=404, detail="Usuário dono não encontrado.")
     return usuario
 
-# -----------------------------------------------------------------------------
-# ROTAS / ENDPOINTS
-# -----------------------------------------------------------------------------
+
+
 @app.get("/api")
 def raiz():
     return {"status": "online", "api": "SiloTech"}
