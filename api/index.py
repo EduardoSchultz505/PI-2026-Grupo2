@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from passlib.context import CryptContext
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, create_engine, desc
 from sqlalchemy.orm import sessionmaker, Session, declarative_base, relationship
-import libsql
+import libsql_experimental as libsql
 
 # -----------------------------------------------------------------------------
 # CONFIGURAÇÃO DO BANCO DE DADOS (Turso na Vercel / SQLite Local para testes)
@@ -16,13 +16,18 @@ TURSO_URL = os.environ.get("TURSO_DATABASE_URL")
 TURSO_TOKEN = os.environ.get("TURSO_AUTH_TOKEN")
 
 if TURSO_URL and TURSO_TOKEN:
-    # Dialeto para o libsql-experimental no SQLAlchemy
-    db_url = TURSO_URL.replace("libsql://", "sqlite+libsql://")
+    # Função criadora de conexão usando a biblioteca oficial do Turso
+    def get_turso_connection():
+        return libsql.connect(database=TURSO_URL, auth_token=TURSO_TOKEN)
+
+    # O SQLAlchemy usa o dialeto padrao de SQLite, mas pega a conexao do Turso
     engine = create_engine(
-        f"{db_url}?authToken={TURSO_TOKEN}",
+        "sqlite://",
+        creator=get_turso_connection,
         connect_args={"check_same_thread": False}
     )
 else:
+    # Fallback para o SQLite local caso rode fora da Vercel
     engine = create_engine("sqlite:///./silotech.db", connect_args={"check_same_thread": False})
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
