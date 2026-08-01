@@ -1,9 +1,8 @@
 fastapi
 uvicorn
 sqlalchemy
-passlib[bcrypt]
+passlib[pbkdf2]
 pydantic
 requests
-pyserial
-sqla-libsql
+sqlite-libsql
 libsql-experimental

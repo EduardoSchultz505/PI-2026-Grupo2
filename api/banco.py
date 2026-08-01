@@ -16,14 +16,14 @@ TURSO_URL = os.environ.get("TURSO_DATABASE_URL")
 TURSO_TOKEN = os.environ.get("TURSO_AUTH_TOKEN")
 
 if TURSO_URL and TURSO_TOKEN:
-    # Formata a URL para o protocolo libsql exigido pelo SQLAlchemy + Turso
+    # Ajusta o protocolo para o dialeto do libsql no SQLAlchemy
     db_url = TURSO_URL.replace("libsql://", "sqlite+libsql://")
     engine = create_engine(
         f"{db_url}?authToken={TURSO_TOKEN}",
         connect_args={"check_same_thread": False}
     )
 else:
-    # Fallback para o SQLite local caso rode fora da Vercel
+    # Fallback para o SQLite local fora da Vercel
     engine = create_engine("sqlite:///./silotech.db", connect_args={"check_same_thread": False})
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
