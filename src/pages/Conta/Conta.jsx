@@ -24,7 +24,7 @@ function Monitoramento() {
     async (sensor) => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/sensor/meu-historico/${usuarioId}?sensor=${sensor}`,
+          `/api/sensor/meu-historico/${usuarioId}?sensor=${sensor}`,
         );
 
         setLeituras((prev) => ({
@@ -40,7 +40,7 @@ function Monitoramento() {
   const carregarDados = useCallback(async () => {
     try {
       const sensoresRes = await axios.get(
-        `http://127.0.0.1:8000/sensor/lista-sensores/${usuarioId}`,
+        `/api/sensor/lista-sensores/${usuarioId}`,
       );
 
       const listaSensores = sensoresRes.data;
@@ -54,7 +54,7 @@ function Monitoramento() {
       }
 
       const alertasRes = await axios.get(
-        `http://127.0.0.1:8000/sensor/alertas/${usuarioId}`,
+        `/api/sensor/alertas/${usuarioId}`,
       );
 
       setAlertas(alertasRes.data.alertas || []);

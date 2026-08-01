@@ -26,7 +26,7 @@ function Grafico() {
     try {
       setErro("");
       const response = await axios.get(
-        `http://127.0.0.1:8000/sensor/lista-sensores/${usuarioId}`
+        `/api/sensor/lista-sensores/${usuarioId}`
       );
       setListaSensores(response.data);
 
@@ -46,7 +46,7 @@ function Grafico() {
     try {
       setErro("");
       const response = await axios.get(
-        `http://127.0.0.1:8000/sensor/meu-historico/${usuarioId}`,
+        `/api/sensor/meu-historico/${usuarioId}`,
         {
           params: { sensor: sensorSelecionado }
         }
