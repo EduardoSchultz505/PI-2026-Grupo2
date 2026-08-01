@@ -15,19 +15,29 @@ import libsql_experimental as libsql
 TURSO_URL = os.environ.get("TURSO_DATABASE_URL")
 TURSO_TOKEN = os.environ.get("TURSO_AUTH_TOKEN")
 
-if TURSO_URL and TURSO_TOKEN:
-    # Função criadora de conexão usando a biblioteca oficial do Turso
-    def get_turso_connection():
-        return libsql.connect(database=TURSO_URL, auth_token=TURSO_TOKEN)
+class LibSQLWrapper:
+    def __init__(self, conn):
+        self._conn = conn
 
-    # O SQLAlchemy usa o dialeto padrao de SQLite, mas pega a conexao do Turso
+    def create_function(self, *args, **kwargs):
+        # Ignora a tentativa do SQLAlchemy de registrar funções REGEXP no SQLite
+        pass
+
+    def __getattr__(self, name):
+        return getattr(self._conn, name)
+    
+if TURSO_URL and TURSO_TOKEN:
+    def get_turso_connection():
+        raw_conn = libsql.connect(database=TURSO_URL, auth_token=TURSO_TOKEN)
+        return LibSQLWrapper(raw_conn)
+
     engine = create_engine(
         "sqlite://",
         creator=get_turso_connection,
         connect_args={"check_same_thread": False}
     )
 else:
-    # Fallback para o SQLite local caso rode fora da Vercel
+    # Fallback local
     engine = create_engine("sqlite:///./silotech.db", connect_args={"check_same_thread": False})
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
