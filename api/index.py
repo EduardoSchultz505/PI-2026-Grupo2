@@ -8,6 +8,7 @@ from passlib.context import CryptContext
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, create_engine, desc
 from sqlalchemy.orm import sessionmaker, Session, declarative_base, relationship
 import libsql_experimental as libsql
+from contextlib import asynccontextmanager
 
 # -----------------------------------------------------------------------------
 # CONFIGURAÇÃO DO BANCO DE DADOS (Turso na Vercel / SQLite Local para testes)
@@ -44,6 +45,39 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
+def seed_admin_usuario():
+    db = SessionLocal()
+    try:
+        # 1. Verifica se já existe QUALQUER usuário cadastrado
+        usuario_existente = db.query(User).first()
+        
+        # 2. Se o banco estiver totalmente vazio, cria o Admin Mestre
+        if not usuario_existente:
+            admin_inicial = User(
+                email="admin@silotech.com",
+                senha=pwd_context.hash("admin123"), # Altere essa senha depois!
+                cargo="admin"  # Ou a flag que você usa (ex: is_admin=True)
+            )
+            db.add(admin_inicial)
+            db.commit()
+            print("=== Admin padrão criado com sucesso! ===")
+    except Exception as e:
+        print(f"Erro ao criar admin seed: {e}")
+        db.rollback()
+    finally:
+        db.close()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Executa ao iniciar
+    Base.metadata.create_all(bind=engine)
+    seed_admin_usuario()
+    
+    yield  # A aplicação fica rodando aqui
+    
+    # Executa ao desligar (opcional)
+
+# 4. Instância do FastA
 # -----------------------------------------------------------------------------
 # MODELOS DO BANCO DE DADOS (SQLAlchemy)
 # -----------------------------------------------------------------------------
@@ -92,7 +126,7 @@ class LeituraCreate(BaseModel):
 # -----------------------------------------------------------------------------
 # INICIALIZAÇÃO DO FASTAPI
 # -----------------------------------------------------------------------------
-app = FastAPI(title="SiloTech API")
+app = FastAPI(lifespan=lifespan, title="SiloTech")
 
 app.add_middleware(
     CORSMiddleware,
