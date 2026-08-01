@@ -1,13 +1,13 @@
 import os
 from datetime import datetime
 from typing import Literal
-
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from passlib.context import CryptContext
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, create_engine, desc
 from sqlalchemy.orm import sessionmaker, Session, declarative_base, relationship
+import libsql
 
 # -----------------------------------------------------------------------------
 # CONFIGURAÇÃO DO BANCO DE DADOS (Turso na Vercel / SQLite Local para testes)
@@ -16,14 +16,13 @@ TURSO_URL = os.environ.get("TURSO_DATABASE_URL")
 TURSO_TOKEN = os.environ.get("TURSO_AUTH_TOKEN")
 
 if TURSO_URL and TURSO_TOKEN:
-    # Ajusta o protocolo para o dialeto do libsql no SQLAlchemy
+    # Dialeto para o libsql-experimental no SQLAlchemy
     db_url = TURSO_URL.replace("libsql://", "sqlite+libsql://")
     engine = create_engine(
         f"{db_url}?authToken={TURSO_TOKEN}",
         connect_args={"check_same_thread": False}
     )
 else:
-    # Fallback para o SQLite local fora da Vercel
     engine = create_engine("sqlite:///./silotech.db", connect_args={"check_same_thread": False})
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
