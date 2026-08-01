@@ -48,15 +48,13 @@ pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 def seed_admin_usuario():
     db = SessionLocal()
     try:
-        # 1. Verifica se já existe QUALQUER usuário cadastrado
         usuario_existente = db.query(User).first()
-        
-        # 2. Se o banco estiver totalmente vazio, cria o Admin Mestre
         if not usuario_existente:
             admin_inicial = User(
+                username="admin", # <--- Adicionado para corresponder ao modelo
                 email="admin@silotech.com",
-                senha=pwd_context.hash("admin123"), # Altere essa senha depois!
-                cargo="admin"  # Ou a flag que você usa (ex: is_admin=True)
+                password=pwd_context.hash("admin123"),
+                role="admin"
             )
             db.add(admin_inicial)
             db.commit()
