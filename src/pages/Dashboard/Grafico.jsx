@@ -78,7 +78,7 @@ function Grafico() {
   useEffect(() => {
     if (sensorSelecionado) {
       buscarDados();
-      const interval = setInterval(buscarDados, 30000);
+      const interval = setInterval(buscarDados, 5000);
       return () => clearInterval(interval);
     }
   }, [buscarDados, sensorSelecionado]);
