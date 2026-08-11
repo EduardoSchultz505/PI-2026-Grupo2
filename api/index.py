@@ -250,13 +250,31 @@ def adicionar_leitura(request: LeituraCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/sensor/meu-historico/{usuario_id}")
-def obter_historico_pessoal(usuario_id: int, sensor: str, db: Session = Depends(get_db)):
+def obter_historico_pessoal(
+    usuario_id: int,
+    sensor: str,
+    db: Session = Depends(get_db)
+):
     dados = db.query(Leitura).filter(
         Leitura.owner_id == usuario_id,
         Leitura.sensor_nome == sensor
     ).order_by(desc(Leitura.horario)).limit(12).all()
-    
-    return dados
+
+    brasil = ZoneInfo("America/Sao_Paulo")
+
+    return [
+        {
+            "id": leitura.id,
+            "sensor_nome": leitura.sensor_nome,
+            "temperatura": leitura.temperatura,
+            "umidade": leitura.umidade,
+            "horario": leitura.horario.replace(
+                tzinfo=timezone.utc
+            ).astimezone(brasil).isoformat(),
+            "owner_id": leitura.owner_id
+        }
+        for leitura in dados
+    ]
 
 @app.get("/api/sensor/lista-sensores/{usuario_id}")
 def listar_sensores_usuario(usuario_id: int, db: Session = Depends(get_db)):
