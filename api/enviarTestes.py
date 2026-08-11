@@ -9,7 +9,15 @@ dados = {
     "owner_id": 2
 }
 
-response = requests.post(url, json=dados)
+try:
+    response = requests.post(
+        url,
+        json=dados,
+        timeout=10
+    )
 
-print("Status:", response.status_code)
-print("Resposta:", response.json())
+    print("Status:", response.status_code)
+    print("Resposta:", response.json())
+
+except requests.exceptions.RequestException as e:
+    print("Erro na requisição:", e)
