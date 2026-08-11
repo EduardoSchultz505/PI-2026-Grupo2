@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 from typing import Literal
 from fastapi import FastAPI, HTTPException, Depends, status
@@ -76,8 +76,10 @@ async def lifespan(app: FastAPI):
     
     # Executa ao desligar (opcional)
 
-def agora_brasil():
-    return datetime.now(ZoneInfo("America/Sao_Paulo")).replace(tzinfo=None)
+def agora_utc():
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
 # 4. Instância do FastA
 # -----------------------------------------------------------------------------
 # MODELOS DO BANCO DE DADOS (SQLAlchemy)
@@ -93,13 +95,14 @@ class User(Base):
 
 class Leitura(Base):
     __tablename__ = "leituras"
+
     id = Column(Integer, primary_key=True, index=True)
     sensor_nome = Column(String, index=True)
     temperatura = Column(Float)
     umidade = Column(Float)
-    horario = Column(DateTime, default=agora_brasil)
+    horario = Column(DateTime, default=agora_utc)
     owner_id = Column(Integer, ForeignKey("users.id"))
-    
+
     dono = relationship("User", back_populates="leituras")
 
 # Cria as tabelas se não existirem

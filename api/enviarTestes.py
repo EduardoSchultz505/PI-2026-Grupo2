@@ -1,11 +1,11 @@
 import requests
 
-url = "http://127.0.0.1:8000/sensor/leitura"
+url = "https://pi-2026-grupo2-git-main-eduardo-a1b9.vercel.app/api/sensor/leitura"
 
 dados = {
-    "sensor_nome": "Sensor Milho",
-    "temperatura": 18,
-    "umidade": 18,
+    "sensor_nome": "Sensor Teste",
+    "temperatura": 15.5,
+    "umidade": 13.2,
     "owner_id": 2
 }
 
