@@ -52,10 +52,8 @@ export default function Tecnologias() {
           <div className="cards-tecnologia">
     <div>
       <h3>Sensores & Hardware</h3>
-      <p>Sensor de Temperatura</p>
-      <p>Sensor de Umidade</p>
-      <p>Microcontroladores</p>
-      <p>Conectividade Wi-Fi</p>
+      <p>Sensor de Temperatura e Umidade com DHT11</p>
+      <p>Microcontrolador e Conectividade Wi-Fi com ESP8266</p>
       <p>Baixo consumo de energia</p>
     </div>
 
