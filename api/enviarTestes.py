@@ -5,10 +5,10 @@ import requests
 BASE_URL = "https://pi-2026-grupo2.vercel.app/"
 
 OWNER_ID = 2         
-SENSORES = ["silo-01", "silo-02", "silo-03"]   
+SENSORES = ["Silo Milho 1"]   
 
-QUANTIDADE_POR_SENSOR = 15   
-INTERVALO_SEGUNDOS = 0.5     
+QUANTIDADE_POR_SENSOR = 90
+INTERVALO_SEGUNDOS = 5 
 
 
 
