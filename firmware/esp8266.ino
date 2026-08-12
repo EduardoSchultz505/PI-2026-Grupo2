@@ -3,24 +3,24 @@
 #include <WiFiClientSecure.h>
 #include <DHT.h>
 
-// -----------------------------------------------------------------------------
-// CONFIGURAÇÕES DO HARDWARE E DA REDE
-// -----------------------------------------------------------------------------
-#define DHTPIN 2       // Pino D4 na NodeMCU
+
+
+
+#define DHTPIN 2       
 #define DHTTYPE DHT11
 
-const char* ssid = "Eduardo";       // Nome do seu Hotspot
-const char* password = "senha123";  // Senha do seu Hotspot
+const char* ssid = "Eduardo";       
+const char* password = "senha123";  
 
-// Rota da API com barra '/' no final para evitar redirecionamento
-const char* servidor = "https://pi-2026-grupo2.vercel.app/api/sensor/leitura/";
-const int OWNER_ID = 2; // ID do usuário existente no banco de dados
+
+const char* servidor = "https:
+const int OWNER_ID = 2; 
 
 DHT dht(DHTPIN, DHTTYPE);
 
-// -----------------------------------------------------------------------------
-// SETUP (Executado apenas uma vez ao ligar)
-// -----------------------------------------------------------------------------
+
+
+
 void setup() {
   Serial.begin(115200);
   delay(1000);
@@ -44,7 +44,7 @@ void setup() {
   Serial.print("IP da NodeMCU: ");
   Serial.println(WiFi.localIP());
 
-  // DNS do Google (8.8.8.8) - Imprescindível para contornar limitações do Hotspot
+  
   IPAddress dns(8, 8, 8, 8);
   IPAddress gateway = WiFi.gatewayIP();
   IPAddress subnet = WiFi.subnetMask();
@@ -52,11 +52,11 @@ void setup() {
   Serial.println("DNS (8.8.8.8) configurado para resolver a Vercel.");
 }
 
-// -----------------------------------------------------------------------------
-// LOOP (Executado continuamente)
-// -----------------------------------------------------------------------------
+
+
+
 void loop() {
-  // 1. Leitura do Sensor
+  
   float temperatura = dht.readTemperature();
   float umidade = dht.readHumidity();
 
@@ -74,15 +74,15 @@ void loop() {
   Serial.print(umidade);
   Serial.println(" %");
 
-  // 2. Envio via HTTPS
+  
   if (WiFi.status() == WL_CONNECTED) {
-    // Instanciação em escopo local para liberar RAM a cada ciclo
+    
     WiFiClientSecure client;
     
-    // Configurações para estabilidade em redes de celular
-    client.setInsecure();            // Salta a validação do certificado raiz
-    client.setTimeout(20000);        // Timeout tolerante de 20s para conexões 4G/5G
-    client.setBufferSizes(512, 512); // Limita tamanho de buffers SSL para poupar memória
+    
+    client.setInsecure();            
+    client.setTimeout(20000);        
+    client.setBufferSizes(512, 512); 
 
     HTTPClient http;
 
@@ -91,7 +91,7 @@ void loop() {
     if (http.begin(client, servidor)) {
       http.addHeader("Content-Type", "application/json");
 
-      // Montagem da estrutura JSON exigida pelo schema FastAPI
+      
       String json = "{";
       json += "\"sensor_nome\":\"DHT11\",";
       json += "\"temperatura\":" + String(temperatura, 2) + ",";
@@ -102,7 +102,7 @@ void loop() {
       Serial.print("JSON: ");
       Serial.println(json);
 
-      // Disparo do POST
+      
       int codigoHTTP = http.POST(json);
 
       Serial.print("Código HTTP: ");
@@ -121,7 +121,7 @@ void loop() {
         Serial.println(http.errorToString(codigoHTTP));
       }
 
-      http.end(); // Libera os recursos HTTP
+      http.end(); 
     } else {
       Serial.println("Não foi possível iniciar o cliente HTTP.");
     }

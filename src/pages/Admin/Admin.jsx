@@ -38,8 +38,9 @@ export default function Admin() {
 
       const adminId = localStorage.getItem("user_id");
 
+      // Rota ajustada para o servidor local
       const response = await fetch(
-        `/api/admin/usuarios?admin_id=${adminId}`
+        `http://localhost:8000/api/admin/usuarios?admin_id=${adminId}`
       );
 
       const data = await response.json();
@@ -63,8 +64,9 @@ export default function Admin() {
     try {
       const adminId = localStorage.getItem("user_id");
 
+      // Rota ajustada com o protocolo http://
       const response = await fetch(
-        `/api/cadastro?admin_id=${adminId}`,
+        `http://localhost:8000/api/cadastro?admin_id=${adminId}`,
         {
           method: "POST",
           headers: {
@@ -101,6 +103,7 @@ export default function Admin() {
       alert("Não foi possível conectar ao servidor.");
     }
   };
+
   return (
     <div className="admin-container">
       <div className="admin-header">

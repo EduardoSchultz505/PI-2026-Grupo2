@@ -8,39 +8,17 @@ from pydantic import BaseModel, Field
 from passlib.context import CryptContext
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, create_engine, desc
 from sqlalchemy.orm import sessionmaker, Session, declarative_base, relationship
-import libsql_experimental as libsql
 from contextlib import asynccontextmanager
 
 # -----------------------------------------------------------------------------
-# CONFIGURAÇÃO DO BANCO DE DADOS (Turso na Vercel / SQLite Local para testes)
+# CONFIGURAÇÃO DO BANCO DE DADOS (SQLite 100% local)
 # -----------------------------------------------------------------------------
-TURSO_URL = os.environ.get("TURSO_DATABASE_URL")
-TURSO_TOKEN = os.environ.get("TURSO_AUTH_TOKEN")
-
-class LibSQLWrapper:
-    def __init__(self, conn):
-        self._conn = conn
-
-    def create_function(self, *args, **kwargs):
-        # Ignora a tentativa do SQLAlchemy de registrar funções REGEXP no SQLite
-        pass
-
-    def __getattr__(self, name):
-        return getattr(self._conn, name)
-
-if TURSO_URL and TURSO_TOKEN:
-    def get_turso_connection():
-        raw_conn = libsql.connect(database=TURSO_URL, auth_token=TURSO_TOKEN)
-        return LibSQLWrapper(raw_conn)
-
-    engine = create_engine(
-        "sqlite://",
-        creator=get_turso_connection,
-        connect_args={"check_same_thread": False}
-    )
-else:
-    # Fallback local
-    engine = create_engine("sqlite:///./silotech.db", connect_args={"check_same_thread": False})
+# O arquivo silotech.db é criado automaticamente na primeira execução,
+# na mesma pasta onde o main.py está localizado.
+engine = create_engine(
+    "sqlite:///./silotech.db",
+    connect_args={"check_same_thread": False}
+)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -49,11 +27,6 @@ pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 # -----------------------------------------------------------------------------
 # FUSO HORÁRIO
 # -----------------------------------------------------------------------------
-# Na Vercel (ambiente serverless mínimo) o zoneinfo do sistema operacional
-# geralmente NÃO está disponível. Sem o pacote "tzdata" no requirements.txt,
-# ZoneInfo("America/Sao_Paulo") falha silenciosamente ou lança exceção,
-# fazendo o horário "vazar" em UTC — 3h adiantado em relação ao Brasil.
-# Por isso o pacote tzdata é obrigatório no requirements.txt (ver arquivo à parte).
 FUSO_BRASIL = ZoneInfo("America/Sao_Paulo")
 
 

@@ -23,11 +23,14 @@ function Grafico() {
 
   const buscarSensoresDisponiveis = useCallback(async () => {
     if (!usuarioId) return;
+
     try {
       setErro("");
+
       const response = await axios.get(
-        `/api/sensor/lista-sensores/${usuarioId}`
+        `http://localhost:8000/api/sensor/lista-sensores/${usuarioId}`
       );
+
       setListaSensores(response.data);
 
       if (response.data.length > 0 && !sensorSelecionado) {
@@ -43,23 +46,34 @@ function Grafico() {
     if (!usuarioId || !sensorSelecionado) return;
 
     setLoading(true);
+
     try {
       setErro("");
+
       const response = await axios.get(
-        `/api/sensor/meu-historico/${usuarioId}`,
+        `http://localhost:8000/api/sensor/meu-historico/${usuarioId}`,
         {
-          params: { sensor: sensorSelecionado }
+          params: { sensor: sensorSelecionado },
         }
       );
-      
-      const formatados = response.data.reverse().map((item) => ({
-        temperatura: item.temperatura,
-        umidade: item.umidade,
-        horaFormatada: new Date(item.horario.replace(" ", "T")).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      }));
+
+      const formatados = [...response.data]
+        .reverse()
+        .map((item) => {
+          const horario = String(item.horario);
+
+          const horaFormatada = horario.includes(" ")
+            ? horario.split(" ")[1].substring(0, 5)
+            : horario.includes("T")
+              ? horario.split("T")[1].substring(0, 5)
+              : horario.substring(0, 5);
+
+          return {
+            temperatura: item.temperatura,
+            umidade: item.umidade,
+            horaFormatada,
+          };
+        });
 
       setDados(formatados);
     } catch (error) {
@@ -78,13 +92,16 @@ function Grafico() {
   useEffect(() => {
     if (sensorSelecionado) {
       buscarDados();
+
       const interval = setInterval(buscarDados, 5000);
+
       return () => clearInterval(interval);
     }
   }, [buscarDados, sensorSelecionado]);
 
-  if (!usuarioId)
+  if (!usuarioId) {
     return <h2 className="loading-text">Faça login para ver seus dados.</h2>;
+  }
 
   return (
     <div className="dashboard-container">
@@ -93,11 +110,13 @@ function Grafico() {
 
         <div className="selector-container">
           <label>Selecione o Sensor: </label>
+
           <select
             value={sensorSelecionado}
             onChange={(e) => setSensorSelecionado(e.target.value)}
           >
             <option value="">Selecione um sensor</option>
+
             {listaSensores.map((nome) => (
               <option key={nome} value={nome}>
                 {nome.replace("_", " ")}
@@ -108,21 +127,27 @@ function Grafico() {
       </div>
 
       {erro && (
-        <div style={{ 
-          padding: "15px", 
-          backgroundColor: "#fee", 
-          color: "#c33", 
-          borderRadius: "5px",
-          marginBottom: "15px"
-        }}>
+        <div
+          style={{
+            padding: "15px",
+            backgroundColor: "#fee",
+            color: "#c33",
+            borderRadius: "5px",
+            marginBottom: "15px",
+          }}
+        >
           {erro}
         </div>
       )}
 
       {listaSensores.length === 0 ? (
-        <p className="loading-text">Aguardando dados de algum sensor...</p>
+        <p className="loading-text">
+          Aguardando dados de algum sensor...
+        </p>
       ) : !sensorSelecionado ? (
-        <p className="loading-text">Selecione um sensor para visualizar dados...</p>
+        <p className="loading-text">
+          Selecione um sensor para visualizar dados...
+        </p>
       ) : loading && dados.length === 0 ? (
         <p className="loading-text">
           Buscando dados do sensor {sensorSelecionado}...
@@ -133,17 +158,41 @@ function Grafico() {
             <h3 className="chart-title temp">
               Temperatura (°C) - {sensorSelecionado}
             </h3>
+
             <div className="chart-wrapper">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart 
+                <LineChart
                   data={dados}
-                  margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                  margin={{
+                    top: 10,
+                    right: 10,
+                    left: -20,
+                    bottom: 0,
+                  }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="horaFormatada" minTickGap={15} tick={{ fontSize: 12 }} />
-                  <YAxis domain={["auto", "auto"]} tick={{ fontSize: 12 }} />
-                  <Tooltip trigger="click" touchDimension="x" />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    vertical={false}
+                  />
+
+                  <XAxis
+                    dataKey="horaFormatada"
+                    minTickGap={15}
+                    tick={{ fontSize: 12 }}
+                  />
+
+                  <YAxis
+                    domain={["auto", "auto"]}
+                    tick={{ fontSize: 12 }}
+                  />
+
+                  <Tooltip
+                    trigger="click"
+                    touchDimension="x"
+                  />
+
                   <Legend />
+
                   <Line
                     type="monotone"
                     dataKey="temperatura"
@@ -159,18 +208,44 @@ function Grafico() {
           </div>
 
           <div className="chart-section">
-            <h3 className="chart-title">Umidade (%) - {sensorSelecionado}</h3>
+            <h3 className="chart-title">
+              Umidade (%) - {sensorSelecionado}
+            </h3>
+
             <div className="chart-wrapper">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart 
+                <LineChart
                   data={dados}
-                  margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                  margin={{
+                    top: 10,
+                    right: 10,
+                    left: -20,
+                    bottom: 0,
+                  }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="horaFormatada" minTickGap={15} tick={{ fontSize: 12 }} />
-                  <YAxis domain={["auto", "auto"]} tick={{ fontSize: 12 }} />
-                  <Tooltip trigger="click" touchDimension="x" />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    vertical={false}
+                  />
+
+                  <XAxis
+                    dataKey="horaFormatada"
+                    minTickGap={15}
+                    tick={{ fontSize: 12 }}
+                  />
+
+                  <YAxis
+                    domain={["auto", "auto"]}
+                    tick={{ fontSize: 12 }}
+                  />
+
+                  <Tooltip
+                    trigger="click"
+                    touchDimension="x"
+                  />
+
                   <Legend />
+
                   <Line
                     type="monotone"
                     dataKey="umidade"
@@ -186,7 +261,9 @@ function Grafico() {
           </div>
 
           {dados.length === 0 && (
-            <p className="loading-text">Nenhum dado disponível para este sensor.</p>
+            <p className="loading-text">
+              Nenhum dado disponível para este sensor.
+            </p>
           )}
         </div>
       )}
